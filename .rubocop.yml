@@ -1,0 +1,24 @@
+inherit_from: .rubocop_todo.yml
+
+require: rubocop-performance
+
+AllCops:
+  NewCops: enable
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Layout/EndAlignment:
+  AutoCorrect: true
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/NumericPredicate:
+  AutoCorrect: true
