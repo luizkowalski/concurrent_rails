@@ -3,6 +3,10 @@
 require 'test_helper'
 
 class MultiTest < ActiveSupport::TestCase
+  test 'should only accepts Procs' do
+    assert_raises(ArgumentError) { ConcurrentRails::Multi.enqueue(42) }
+  end
+
   test 'multiple actions without errors' do
     multi = ConcurrentRails::Multi.enqueue(
       -> { 42 },

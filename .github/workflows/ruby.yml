@@ -1,0 +1,58 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: Ruby
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        gemfile:
+          - Gemfile
+          - gemfiles/Gemfile-rails-5-1
+          - gemfiles/Gemfile-rails-5-2
+          - gemfiles/Gemfile-rails-6-0
+        ruby:
+          - 2.4
+          - 2.5
+          - 2.6
+          - 2.7
+          - 3.0
+        exclude:
+          - ruby: 2.4
+            gemfile: Gemfile
+          - ruby: 2.4
+            gemfile: gemfiles/Gemfile-rails-5-1
+          - ruby: 2.4
+            gemfile: gemfiles/Gemfile-rails-6-0
+          - ruby: 3.0
+            gemfile: gemfiles/Gemfile-rails-5-0
+          - ruby: 3.0
+            gemfile: gemfiles/Gemfile-rails-5-1
+          - ruby: 3.0
+            gemfile: gemfiles/Gemfile-rails-5-2
+    env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true # runs bundle install and caches installed gems automatically
+        bundler: ${{ env.BUNDLER_VERSION || 'latest' }}
+    - name: Run tests
+      run: bin/test
+    - name: Rubocop
+      run: bundle exec rubocop -D
