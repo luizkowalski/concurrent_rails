@@ -24,8 +24,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rails', '>= 5.0'
 
-  spec.add_runtime_dependency 'rubocop', '1.12'
-  spec.add_runtime_dependency 'rubocop-performance', '1.10'
+  spec.add_development_dependency 'rubocop', '>= 1.12'
+  spec.add_development_dependency 'rubocop-performance', '>= 1.10'
 
   spec.required_ruby_version = '>= 2.4'
 end
