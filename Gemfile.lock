@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    concurrent_rails (0.1.0)
+    concurrent_rails (0.1.2)
       rails (>= 5.0)
 
 GEM
@@ -88,6 +88,8 @@ GEM
     nio4r (2.5.7)
     nokogiri (1.11.3)
       mini_portile2 (~> 2.5.0)
+      racc (~> 1.4)
+    nokogiri (1.11.3-x86_64-darwin)
       racc (~> 1.4)
     parallel (1.20.1)
     parser (3.0.1.0)
