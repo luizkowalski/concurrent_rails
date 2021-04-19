@@ -14,7 +14,7 @@ This library provides three classes that will help you run tasks in parallel: `C
 ### Promises
 
 `Promises` is the recommended way from `concurrent-ruby` to create `Future`s as `Concurrent::Future` will be deprecated at some point.
-Similar to other classes, all you have to do is call `.future` helper and pass a task:
+Similar to other classes, all you have to do is call `.future` helper and pass a block:
 
 ```ruby
 irb(main):001:0> future = ConcurrentRails::Promises.future { sleep(5); 42 }
@@ -31,7 +31,7 @@ irb(main):005:0> future.value
 => 42
 ```
 
-The benefit of `Promises` over a pure `Future` class is that you are able to chain futures without blocking the main thread.
+The benefit of `Promises` over a pure `Future` class is that you can chain futures without blocking the main thread.
 
 ```ruby
 irb(main):006:0> future = ConcurrentRails::Promises.future { 42 }.then { |v| v * 2 }
@@ -42,7 +42,7 @@ irb(main):007:0> future.value
 
 ### Future
 
-`ConcurrentRails::Future` will execute your code in a separated thread and you can check the progress of it whenever you need. When the task is ready, you can access the result with `#result` function:
+`ConcurrentRails::Future` will execute your code in a separated thread and you can check the progress of it whenever you need it. When the task is ready, you can access the result with `#result` function:
 
 ```ruby
 irb(main):001:0> future = ConcurrentRails::Future.new do
@@ -143,7 +143,7 @@ For more information on how Futures work and how Rails handle multithread check 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'concurrent_rails'
+gem 'concurrent_rails', '~> 0.1.3'
 ```
 
 And then execute:
