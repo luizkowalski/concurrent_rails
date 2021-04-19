@@ -9,7 +9,36 @@ The goal of this gem is to provide a simple library that allows the developer to
 
 ## Usage
 
-This library provides two classes that will help you run tasks in parallel: `ConcurrentRails::Future` and `ConcurrentRails::Multi`
+This library provides three classes that will help you run tasks in parallel: `ConcurrentRails::Promises`,  `ConcurrentRails::Future` and `ConcurrentRails::Multi`
+
+### Promises
+
+`Promises` is the recommended way from `concurrent-ruby` to create `Future`s as `Concurrent::Future` will be deprecated at some point.
+Similar to other classes, all you have to do is call `.future` helper and pass a task:
+
+```ruby
+irb(main):001:0> future = ConcurrentRails::Promises.future { sleep(5); 42 }
+=> #<ConcurrentRails::Promises:0x00007fe92ea9ff28 @future_instance=#<Con...
+
+irb(main):003:0> future.state
+=> :pending
+
+# After future is processed
+irb(main):004:0> future.state
+=> :fulfilled
+
+irb(main):005:0> future.value
+=> 42
+```
+
+The benefit of `Promises` over a pure `Future` class is that you are able to chain futures without blocking the main thread.
+
+```ruby
+irb(main):006:0> future = ConcurrentRails::Promises.future { 42 }.then { |v| v * 2 }
+=> #<ConcurrentRails::Promises:0x00007fe92eba3460 @future_instance=#...
+irb(main):007:0> future.value
+=> 84
+```
 
 ### Future
 
