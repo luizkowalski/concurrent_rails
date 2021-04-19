@@ -5,13 +5,13 @@ module ConcurrentRails
     include Concurrent::Promises::FactoryMethods
     extend Forwardable
 
-    def self.future(...)
-      new.run_on_rails(...)
+    def self.future(*args, &block)
+      new.run_on_rails(*args, &block)
     end
 
-    def then(...)
+    def then(*args, &block)
       @future_instance = Rails.application.executor.wrap do
-        future_instance.then(...)
+        future_instance.then(*args, &block)
       end
 
       self
