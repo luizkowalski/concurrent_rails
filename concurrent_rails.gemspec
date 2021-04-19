@@ -5,7 +5,7 @@ require_relative 'lib/concurrent_rails/version'
 Gem::Specification.new do |spec|
   spec.name        = 'concurrent_rails'
   spec.version     = ConcurrentRails::VERSION
-  spec.authors     = ['Luiz Eduardo']
+  spec.authors     = ['Luiz Eduardo Kowalski']
   spec.email       = ['luizeduardokowalski@gmail.com']
   spec.homepage    = 'https://github.com/luizkowalski/concurrent_rails'
   spec.summary     = 'Multithread is hard'
@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
-  spec.add_dependency 'rails', '>= 5.0'
+  spec.add_dependency 'rails', '>= 5.2'
 
   spec.add_development_dependency 'rubocop', '>= 1.12'
   spec.add_development_dependency 'rubocop-performance', '>= 1.10'
