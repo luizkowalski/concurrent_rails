@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.version     = ConcurrentRails::VERSION
   spec.authors     = ['Luiz Eduardo']
   spec.email       = ['luizeduardokowalski@gmail.com']
-  spec.homepage    = 'https://github.com/luizkowalski/concurrent-rails'
+  spec.homepage    = 'https://github.com/luizkowalski/concurrent_rails'
   spec.summary     = 'Multithread is hard'
   spec.description = 'Small library to make concurrent-ruby and Rails play nice together'
   spec.license     = 'MIT'
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
-  spec.metadata['changelog_uri'] = 'https://github.com/luizkowalski/concurrent-rails/CHANGELOG.md'
+  spec.metadata['changelog_uri'] = 'https://github.com/luizkowalski/concurrent_rails/CHANGELOG.md'
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
