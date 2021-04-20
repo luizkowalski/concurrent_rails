@@ -17,7 +17,7 @@ This library provides three classes that will help you run tasks in parallel: `C
 Similar to other classes, all you have to do is call `.future` helper and pass a block:
 
 ```ruby
-irb(main):010:0> future = ConcurrentRails::Promises.future(5) { |v| sleep(v); 42 }
+irb(main):001:0> future = ConcurrentRails::Promises.future(5) { |v| sleep(v); 42 }
 => #<ConcurrentRails::Promises:0x00007fed68db66b0 @future_instance=#<Concurrent::Promises::Future
 
 irb(main):003:0> future.state
