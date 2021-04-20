@@ -5,7 +5,6 @@ module ConcurrentRails
     extend Forwardable
 
     def initialize(executor: :io, &block)
-      @task     = block
       @executor = executor
       @future   = run_on_rails(block)
     end
@@ -40,6 +39,6 @@ module ConcurrentRails
       end
     end
 
-    attr_reader :executor, :task, :future
+    attr_reader :executor, :future
   end
 end

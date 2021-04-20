@@ -5,13 +5,13 @@ module ConcurrentRails
     include Concurrent::Promises::FactoryMethods
     extend Forwardable
 
-    def self.future(*args, &block)
-      new.run_on_rails(*args, &block)
+    def self.future(*args, &task)
+      new.run_on_rails(*args, &task)
     end
 
-    def then(*args, &block)
+    def then(*args, &task)
       @future_instance = Rails.application.executor.wrap do
-        future_instance.then(*args, &block)
+        future_instance.then(*args, &task)
       end
 
       self
@@ -31,9 +31,9 @@ module ConcurrentRails
       end
     end
 
-    def run_on_rails(*args, &block)
+    def run_on_rails(*args, &task)
       @future_instance = Rails.application.executor.wrap do
-        future(args, &block)
+        future_on(default_executor, *args, &task)
       end
 
       self
@@ -43,6 +43,6 @@ module ConcurrentRails
 
     private
 
-    attr_reader :task, :future_instance
+    attr_reader :future_instance
   end
 end

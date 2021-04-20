@@ -6,19 +6,39 @@ class PromisesTest < ActiveSupport::TestCase
   test 'should retrun value as expected' do
     future = ConcurrentRails::Promises.future { 42 }
 
-    assert(future.value, 42)
+    assert_equal(future.value, 42)
   end
 
   test 'should chain futures with `then`' do
     future = ConcurrentRails::Promises.future { 42 }.then { |v| v * 2 }
 
-    assert(future.value, 84)
+    assert_equal(future.value, 84)
   end
 
   test 'should chain futures with `then` and args' do
     future = ConcurrentRails::Promises.future { 42 }.
              then(4) { |v, args| (v * 2) - args }
 
-    assert(future.value, 80)
+    assert_equal(future.value, 80)
+  end
+
+  test 'should accept `then` argument' do
+    future = ConcurrentRails::Promises.future { 42 }.then(2) { |v, arg| (v * 2) + arg }
+
+    assert_equal(future.value!, 86)
+  end
+
+  test 'should accept `future` argument' do
+    future = ConcurrentRails::Promises.future(2) { |v| v * 3 }.then { |v| v * 2 }
+
+    assert_equal(future.value!, 12)
+  end
+
+  test 'should accept `future` and `then` argument' do
+    future = ConcurrentRails::Promises.
+             future(2) { |v| v * 2 }.
+             then(5) { |v, arg| v * arg }
+
+    assert_equal(future.value!, 20)
   end
 end
