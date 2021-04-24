@@ -1,3 +1,8 @@
+# 0.1.5
+
+* Added `value!` to `ConcurrentRails::Future`
+* Updatede development dependencies
+
 # 0.1.4
 
 * Fixed `ConcurrentRails::Promises`'s `future` factory so it handles parameters and block correctly
