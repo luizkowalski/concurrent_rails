@@ -8,17 +8,8 @@ AllCops:
 Layout/DotPosition:
   EnforcedStyle: trailing
 
-Layout/EndAlignment:
-  AutoCorrect: true
-
-Layout/FirstArrayElementIndentation:
-  EnforcedStyle: consistent
-
 Style/ClassAndModuleChildren:
   Enabled: false
 
 Style/Documentation:
   Enabled: false
-
-Style/NumericPredicate:
-  AutoCorrect: true

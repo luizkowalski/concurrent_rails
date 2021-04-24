@@ -16,20 +16,25 @@ class PromisesTest < ActiveSupport::TestCase
   end
 
   test 'should chain futures with `then` and args' do
-    future = ConcurrentRails::Promises.future { 42 }.
+    future = ConcurrentRails::Promises.
+             future { 42 }.
              then(4) { |v, args| (v * 2) - args }
 
     assert_equal(future.value, 80)
   end
 
   test 'should accept `then` argument' do
-    future = ConcurrentRails::Promises.future { 42 }.then(2) { |v, arg| (v * 2) + arg }
+    future = ConcurrentRails::Promises.
+             future { 42 }.
+             then(2) { |v, arg| (v * 2) + arg }
 
     assert_equal(future.value!, 86)
   end
 
   test 'should accept `future` argument' do
-    future = ConcurrentRails::Promises.future(2) { |v| v * 3 }.then { |v| v * 2 }
+    future = ConcurrentRails::Promises.
+             future(2) { |v| v * 3 }.
+             then { |v| v * 2 }
 
     assert_equal(future.value!, 12)
   end
