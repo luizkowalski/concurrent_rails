@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
-  spec.metadata['changelog_uri'] = 'https://github.com/luizkowalski/concurrent_rails/CHANGELOG.md'
+  spec.metadata['changelog_uri'] = 'https://github.com/luizkowalski/concurrent_rails/blob/master/CHANGELOG.md'
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
