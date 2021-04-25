@@ -30,6 +30,10 @@ module ConcurrentRails
       futures.map(&:value)
     end
 
+    def compute!
+      futures.map(&:value!)
+    end
+
     def complete?
       futures.all?(&:complete?)
     end

@@ -29,6 +29,15 @@ class MultiTest < ActiveSupport::TestCase
     assert_not_empty(multi.errors)
   end
 
+  test 'should rais error on compute!' do
+    multi = ConcurrentRails::Multi.enqueue(
+      -> { 42 },
+      -> { 2 / 0 }
+    )
+
+    assert_raises(ZeroDivisionError) { multi.compute! }
+  end
+
   test 'multiple actions with executor' do
     pool = ::Concurrent::CachedThreadPool.new
     multi = ConcurrentRails::Multi.enqueue(

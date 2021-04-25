@@ -18,13 +18,9 @@ module ConcurrentRails
     %i[value value!].each do |method_name|
       define_method method_name do
         Rails.application.executor.wrap do
-          result = nil
-
           ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
-            result = future.__send__(method_name)
+            future.__send__(method_name)
           end
-
-          result
         end
       end
     end
