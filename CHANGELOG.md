@@ -1,3 +1,10 @@
+# 0.1.6
+
+* Added support for `timeout` and `timeout_value` on `Promises#value`
+* Added `future_on` on `Promises`, allowing the user to pass a custom executor
+* Default executor for `Future` is now `:fast` instead of `:io`
+* Code cleanup
+
 # 0.1.5
 
 * Added `value!` to `ConcurrentRails::Future`

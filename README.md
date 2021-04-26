@@ -143,7 +143,7 @@ For more information on how Futures work and how Rails handle multithread check 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'concurrent_rails', '~> 0.1.5'
+gem 'concurrent_rails', '~> 0.1.6'
 ```
 
 And then execute:

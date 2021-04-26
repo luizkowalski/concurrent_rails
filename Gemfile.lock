@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    concurrent_rails (0.1.5)
+    concurrent_rails (0.1.6)
       rails (>= 5.2)
 
 GEM

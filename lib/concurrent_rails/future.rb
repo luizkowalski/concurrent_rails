@@ -4,7 +4,7 @@ module ConcurrentRails
   class Future
     extend Forwardable
 
-    def initialize(executor: :io, &block)
+    def initialize(executor: :fast, &block)
       @executor = executor
       @future   = run_on_rails(block)
     end
