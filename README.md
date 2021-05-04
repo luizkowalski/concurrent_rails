@@ -9,7 +9,7 @@ The goal of this gem is to provide a simple library that allows the developer to
 
 ## Usage
 
-This library provides three classes that will help you run tasks in parallel: `ConcurrentRails::Promises`,  `ConcurrentRails::Future` and `ConcurrentRails::Multi`
+This library provides three classes that will help you run tasks in parallel: `ConcurrentRails::Promises`,  `ConcurrentRails::Future` ([in process of being deprecated by concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby#deprecated)) and `ConcurrentRails::Multi`
 
 ### Promises
 
