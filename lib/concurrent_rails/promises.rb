@@ -11,29 +11,34 @@ module ConcurrentRails
       end
 
       def future_on(executor, *args, &task)
-        new.with_rails(executor, *args, &task)
+        new(executor).load_on_rails(*args, &task)
       end
     end
 
-    def then(*args, &task)
-      @future_instance = Rails.application.executor.wrap do
-        future_instance.then(*args, &task)
-      end
+    def initialize(executor)
+      @executor = executor
+    end
+
+    def load_on_rails(*args, &task)
+      @future_instance = rails_wrapped { future_on(executor, *args, &task) }
 
       self
     end
 
-    def chain(*args, &task)
-      Rails.application.executor.wrap do
-        future_instance.chain(*args, &task)
-      end
+    %i[then chain].each do |chainable|
+      define_method(chainable) do |*args, &task|
+        method = "#{chainable}_on"
+        @future_instance = rails_wrapped do
+          future_instance.__send__(method, executor, *args, &task)
+        end
 
-      self
+        self
+      end
     end
 
     %i[value value!].each do |method_name|
-      define_method method_name do |timeout = nil, timeout_value = nil|
-        Rails.application.executor.wrap do
+      define_method(method_name) do |timeout = nil, timeout_value = nil|
+        rails_wrapped do
           ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
             future_instance.__send__(method_name, timeout, timeout_value)
           end
@@ -41,18 +46,16 @@ module ConcurrentRails
       end
     end
 
-    def with_rails(executor, *args, &task)
-      @future_instance = Rails.application.executor.wrap do
-        future_on(executor, *args, &task)
-      end
-
-      self
+    %i[state reason rejected? resolved? fulfilled?].each do |delegatable|
+      def_delegator :@future_instance, delegatable
     end
-
-    def_delegators :@future_instance, :state, :reason, :rejected?, :resolved?
 
     private
 
-    attr_reader :future_instance
+    def rails_wrapped(&block)
+      Rails.application.executor.wrap(&block)
+    end
+
+    attr_reader :future_instance, :executor
   end
 end

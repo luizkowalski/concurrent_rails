@@ -29,6 +29,22 @@ class PromisesTest < ActiveSupport::TestCase
     assert_equal(future.value, 84)
   end
 
+  test 'should chain futures with `chain`' do
+    future = ConcurrentRails::Promises.future { 42 }.chain do |_fulfilled, value, _reason|
+      value * 2
+    end
+
+    assert_equal(future.value, 84)
+  end
+
+  test 'should chain futures with `chain` and `then`' do
+    future = ConcurrentRails::Promises.future { 42 }.
+             chain { |_fulfilled, value, _reason| value * 2 }.
+             then { |v| v - 2 }
+
+    assert_equal(future.value, 82)
+  end
+
   test 'should chain futures with `then` and args' do
     future = ConcurrentRails::Promises.
              future { 42 }.
