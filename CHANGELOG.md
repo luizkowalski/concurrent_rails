@@ -1,3 +1,8 @@
+# 0.1.7
+
+* Added `chain` method to promises
+* Fixed wrong method forwarding to `Promises`: `resolved?` instead of `complete?`
+
 # 0.1.6
 
 * Added support for `timeout` and `timeout_value` on `Promises#value`

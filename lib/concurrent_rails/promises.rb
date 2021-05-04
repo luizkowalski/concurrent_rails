@@ -23,6 +23,14 @@ module ConcurrentRails
       self
     end
 
+    def chain(*args, &task)
+      Rails.application.executor.wrap do
+        future_instance.chain(*args, &task)
+      end
+
+      self
+    end
+
     %i[value value!].each do |method_name|
       define_method method_name do |timeout = nil, timeout_value = nil|
         Rails.application.executor.wrap do
@@ -41,7 +49,7 @@ module ConcurrentRails
       self
     end
 
-    def_delegators :@future_instance, :state, :reason, :rejected?, :complete?
+    def_delegators :@future_instance, :state, :reason, :rejected?, :resolved?
 
     private
 
