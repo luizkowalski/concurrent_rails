@@ -17,7 +17,7 @@ module ConcurrentRails
 
     %i[value value!].each do |method_name|
       define_method method_name do
-        Rails.application.executor.wrap do
+        rails_wrapped do
           ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
             future.__send__(method_name)
           end
@@ -30,11 +30,15 @@ module ConcurrentRails
     private
 
     def run_on_rails(block)
-      @future = Rails.application.executor.wrap do
+      @future = rails_wrapped do
         Concurrent::Future.new(executor: executor) do
-          Rails.application.executor.wrap(&block)
+          rails_wrapped(&block)
         end
       end
+    end
+
+    def rails_wrapped(&block)
+      Rails.application.executor.wrap(&block)
     end
 
     attr_reader :executor, :future

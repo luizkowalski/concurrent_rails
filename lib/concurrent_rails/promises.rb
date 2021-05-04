@@ -11,7 +11,7 @@ module ConcurrentRails
       end
 
       def future_on(executor, *args, &task)
-        new(executor).load_on_rails(*args, &task)
+        new(executor).run_on_rails(*args, &task)
       end
     end
 
@@ -19,7 +19,7 @@ module ConcurrentRails
       @executor = executor
     end
 
-    def load_on_rails(*args, &task)
+    def run_on_rails(*args, &task)
       @future_instance = rails_wrapped { future_on(executor, *args, &task) }
 
       self
