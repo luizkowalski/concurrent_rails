@@ -1,3 +1,8 @@
+# 0.1.8
+
+* Use the same executor for all `Promises` chaining methods
+* Update development dependencies
+
 # 0.1.7
 
 * Added `chain` method to promises
