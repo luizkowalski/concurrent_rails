@@ -2,11 +2,10 @@
 
 module ConcurrentRails
   class Future
-    extend Forwardable
-
-    def initialize(executor: :fast, &block)
+    def initialize(executor: :io, &block)
       @executor = executor
       @future   = run_on_rails(block)
+      # ActiveSupport::Deprecation.warn('Concurrent::Future is deprecated')
     end
 
     def execute
@@ -25,7 +24,7 @@ module ConcurrentRails
       end
     end
 
-    def_delegators :@future, :state, :reason, :rejected?, :complete?, :add_observer
+    delegate :state, :reason, :rejected?, :complete?, :add_observer, to: :future
 
     private
 
