@@ -25,8 +25,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '>= 5.2'
 
   spec.add_development_dependency 'rubocop', '>= 1.12'
-  spec.add_development_dependency 'rubocop-performance', '>= 1.10'
   spec.add_development_dependency 'rubocop-minitest', '>= 0.12'
+  spec.add_development_dependency 'rubocop-performance', '>= 1.10'
   spec.add_development_dependency 'sqlite3', '~> 1.4'
 
   spec.required_ruby_version = '>= 2.6'
