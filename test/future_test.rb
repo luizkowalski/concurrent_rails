@@ -9,7 +9,7 @@ class FutureTest < ActiveSupport::TestCase
       42
     end.execute
 
-    assert_equal(future.state, :pending)
+    assert_equal(:pending, future.state)
   end
 
   test 'should be a :rejected future' do
@@ -18,7 +18,7 @@ class FutureTest < ActiveSupport::TestCase
     end.execute
 
     assert_nil(future.value)
-    assert_equal(future.state, :rejected)
+    assert_equal(:rejected, future.state)
     assert_instance_of(ZeroDivisionError, future.reason)
   end
 
@@ -27,8 +27,8 @@ class FutureTest < ActiveSupport::TestCase
       42
     end.execute
 
-    assert_equal(future.value, 42)
-    assert_equal(future.state, :fulfilled)
+    assert_equal(42, future.value)
+    assert_equal(:fulfilled, future.state)
   end
 
   test 'should execute with a different pool' do
@@ -37,7 +37,7 @@ class FutureTest < ActiveSupport::TestCase
       42
     end.execute
 
-    assert_equal(future.value, 42)
-    assert_equal(future.state, :fulfilled)
+    assert_equal(42, future.value)
+    assert_equal(:fulfilled, future.state)
   end
 end

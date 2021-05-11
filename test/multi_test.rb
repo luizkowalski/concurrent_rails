@@ -13,7 +13,7 @@ class MultiTest < ActiveSupport::TestCase
       -> { :multi_test }
     )
 
-    assert_equal(multi.compute, [42, :multi_test])
+    assert_equal([42, :multi_test], multi.compute)
     assert(multi.complete?)
     assert_empty(multi.errors)
   end
@@ -24,7 +24,7 @@ class MultiTest < ActiveSupport::TestCase
       -> { 2 / 0 }
     )
 
-    assert_equal(multi.compute, [42, nil])
+    assert_equal([42, nil], multi.compute)
     assert(multi.complete?)
     assert_not_empty(multi.errors)
   end
@@ -46,7 +46,7 @@ class MultiTest < ActiveSupport::TestCase
       executor: pool
     )
 
-    assert_equal(multi.compute, [42, :multi_test])
+    assert_equal([42, :multi_test], multi.compute)
     assert(multi.complete?)
   end
 end

@@ -6,15 +6,15 @@ class DelayTest < ActiveSupport::TestCase
   test 'should be pending until touched' do
     delay_untouched = ConcurrentRails::Promises.delay { 42 }
 
-    assert_equal(delay_untouched.state, :pending)
+    assert_equal(:pending, delay_untouched.state)
   end
 
   test 'should run when touched' do
     touched_delay = ConcurrentRails::Promises.delay { 42 }
-    assert_equal(touched_delay.state, :pending)
+    assert_equal(:pending, touched_delay.state)
 
     touched_delay.touch
-    assert_equal(touched_delay.value, 42)
+    assert_equal(42, touched_delay.value)
   end
 
   test 'should execute on_fulfillment callback' do
@@ -23,11 +23,11 @@ class DelayTest < ActiveSupport::TestCase
     delay = ConcurrentRails::Promises.delay { User.last }.
             on_fulfillment! { |user| user.update!(name: 'new name') }
 
-    assert_equal(test_user.name, 'old name') # Promise was not triggered yet
+    assert_equal('old name', test_user.name) # Promise was not triggered yet
 
     delay.value
 
-    assert_equal(test_user.reload.name, 'new name')
+    assert_equal('new name', test_user.reload.name)
   end
 
   test 'should execute on_rejection callback' do
@@ -38,7 +38,7 @@ class DelayTest < ActiveSupport::TestCase
     delay.value
 
     assert_not_empty(array)
-    assert_equal(array.pop, 'Error: divided by 0')
+    assert_equal('Error: divided by 0', array.pop)
   end
 
   test 'should not execute on_rejection callback when successful' do
@@ -63,6 +63,6 @@ class DelayTest < ActiveSupport::TestCase
 
     delay.value
 
-    assert_equal(array.pop, 84)
+    assert_equal(84, array.pop)
   end
 end

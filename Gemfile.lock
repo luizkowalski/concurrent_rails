@@ -139,6 +139,8 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.5.0)
       parser (>= 3.0.1.1)
+    rubocop-minitest (0.12.1)
+      rubocop (>= 0.90, < 2.0)
     rubocop-performance (1.11.3)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
@@ -167,6 +169,7 @@ PLATFORMS
 DEPENDENCIES
   concurrent_rails!
   rubocop (>= 1.12)
+  rubocop-minitest (>= 0.12)
   rubocop-performance (>= 1.10)
   sqlite3 (~> 1.4)
 
