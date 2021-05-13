@@ -65,4 +65,15 @@ class DelayTest < ActiveSupport::TestCase
 
     assert_equal(84, array.pop)
   end
+
+  test 'should execute callback on_resolution' do
+    array = Concurrent::Array.new
+    delay = ConcurrentRails::Promises.delay { 42 }.
+            then { |v| v * 2 }.
+            on_resolution! { |_fulfilled, value, _reason| array.push(value) }
+
+    delay.value
+
+    assert_equal(84, array.pop)
+  end
 end
