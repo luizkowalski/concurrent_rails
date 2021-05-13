@@ -37,7 +37,7 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true # runs bundle install and caches installed gems automatically
         bundler: ${{ env.BUNDLER_VERSION || 'latest' }}
-    - name: Run tests
-      run: bin/test
     - name: Rubocop
       run: bundle exec rubocop -D
+    - name: Run tests
+      run: bin/test
