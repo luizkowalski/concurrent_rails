@@ -13,8 +13,7 @@ This library provides three classes that will help you run tasks in parallel: `C
 
 ### Promises
 
-`Promises` is the recommended way from `concurrent-ruby` to create `Future`s as `Concurrent::Future` will be deprecated at some point.
-Similar to other classes, all you have to do is call `.future` helper and pass a block:
+`Promises` is the recommended way from `concurrent-ruby` to create `Future`s as `Concurrent::Future` will be deprecated at some point. All you have to do is call `#future` and pass a block to be executed asynchronously:
 
 ```ruby
 irb(main):001:0> future = ConcurrentRails::Promises.future(5) { |v| sleep(v); 42 }
@@ -40,7 +39,50 @@ irb(main):002:0> future.value
 => 84
 ```
 
-### Future
+### Delayed futures
+
+Delayed future is a future that is enqueued but not run until `#touch` or any other method that requires a resolution is called.
+
+```ruby
+irb(main):002:0> delay = ConcurrentRails::Promises.delay { 42 }
+=> #<ConcurrentRails::Promises:0x00007f8b55333d48 @executor=:io, @instan...
+
+irb(main):003:0> delay.state
+=> :pending
+
+irb(main):004:0> delay.touch
+=> #<Concurrent::Promises::Future:0x00007f8b553325b0 pending>
+
+irb(main):005:0> delay.state
+=> :fulfilled
+
+irb(main):006:0> delay.value
+=> 42
+```
+
+Three methods will trigger a resolution: `#touch`, `#value` and `#wait`: `#touch` will simply trigger the execution but won't block the main thread, while `#wait` and `#value` will block the main thread until a resolution is given.
+
+### Callbacks
+
+Delayed and regular futures can set a callback to be executed after the resolution of the future. There are three different callbacks:
+
+* `on_resolution`: runs after the future is resolved and yields three parameters to the callback in the following order: `true/false` for future's fulfillment, `value` as the result of the future execution, and `reason`, that will be `nil` if the future fulfilled or the error that the future triggered.
+
+* `on_fulfillment`: runs after the future is fulfilled and yields `value` to the callback
+
+* `on_rejection`: runs after the future is rejected and yields the `error` to the callback
+
+```ruby
+delay = ConcurrentRails::Promises.delay { complex_find_user_query }.
+        on_fulfillment { |user| user.update!(name: 'John Doe') }.
+        on_rejection { |reason| log_error(reason) }
+
+delay.touch
+```
+
+All of these callbacks have a bang version (e.g. `on_fulfillment!`). The bang version will execute the callback on the same thread pool that was initially set up and the version without bang will run asynchronously on a different executor.
+
+### (Deprecated) Future
 
 `ConcurrentRails::Future` will execute your code in a separated thread and you can check the progress of it whenever you need it. When the task is ready, you can access the result with `#result` function:
 
@@ -81,7 +123,7 @@ irb(main):005:0> future.reason
 => #<ZeroDivisionError: divided by 0>
 ```
 
-### Multi
+### (Deprecated) Multi
 
 `ConcurrentRails::Multi` will let you execute multiple tasks in parallel and aggregate the results of each task when they are done. `Multi` accepts an undefined number of `Proc`s.
 
@@ -143,7 +185,7 @@ For more information on how Futures work and how Rails handle multithread check 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'concurrent_rails', '~> 0.1.8'
+gem 'concurrent_rails', '~> 0.2.0'
 ```
 
 And then execute:

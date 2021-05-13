@@ -6,6 +6,6 @@ class AppTest < ActiveSupport::TestCase
   test 'works with Rails' do
     response = DummyService.do_something
 
-    assert_equal(response, 42)
+    assert_equal(42, response)
   end
 end

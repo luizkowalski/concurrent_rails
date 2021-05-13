@@ -6,7 +6,7 @@ class PromisesTest < ActiveSupport::TestCase
   test 'should retrun value as expected' do
     future = ConcurrentRails::Promises.future { 42 }
 
-    assert_equal(future.value, 42)
+    assert_equal(42, future.value)
   end
 
   test 'should retrun `resolved?` with successful operation' do
@@ -26,7 +26,7 @@ class PromisesTest < ActiveSupport::TestCase
   test 'should chain futures with `then`' do
     future = ConcurrentRails::Promises.future { 42 }.then { |v| v * 2 }
 
-    assert_equal(future.value, 84)
+    assert_equal(84, future.value)
   end
 
   test 'should chain futures with `chain`' do
@@ -34,7 +34,7 @@ class PromisesTest < ActiveSupport::TestCase
       value * 2
     end
 
-    assert_equal(future.value, 84)
+    assert_equal(84, future.value)
   end
 
   test 'should chain futures with `chain` and `then`' do
@@ -42,7 +42,7 @@ class PromisesTest < ActiveSupport::TestCase
              chain { |_fulfilled, value, _reason| value * 2 }.
              then { |v| v - 2 }
 
-    assert_equal(future.value, 82)
+    assert_equal(82, future.value)
   end
 
   test 'should chain futures with `then` and args' do
@@ -50,7 +50,7 @@ class PromisesTest < ActiveSupport::TestCase
              future { 42 }.
              then(4) { |v, args| (v * 2) - args }
 
-    assert_equal(future.value, 80)
+    assert_equal(80, future.value)
   end
 
   test 'should accept `then` argument' do
@@ -58,7 +58,7 @@ class PromisesTest < ActiveSupport::TestCase
              future { 42 }.
              then(2) { |v, arg| (v * 2) + arg }
 
-    assert_equal(future.value!, 86)
+    assert_equal(86, future.value!)
   end
 
   test 'should accept `future` argument' do
@@ -66,7 +66,7 @@ class PromisesTest < ActiveSupport::TestCase
              future(2) { |v| v * 3 }.
              then { |v| v * 2 }
 
-    assert_equal(future.value!, 12)
+    assert_equal(12, future.value!)
   end
 
   test 'should accept `future` and `then` argument' do
@@ -74,7 +74,7 @@ class PromisesTest < ActiveSupport::TestCase
              future(2) { |v| v * 2 }.
              then(5) { |v, arg| v * arg }
 
-    assert_equal(future.value!, 20)
+    assert_equal(20, future.value!)
   end
 
   test 'should return timeout value when future expires' do
@@ -83,5 +83,31 @@ class PromisesTest < ActiveSupport::TestCase
             value(0.1, timeout_string)
 
     assert_equal(value, timeout_string)
+  end
+
+  test 'should execute callback on_resolution!' do
+    array = Concurrent::Array.new
+    ConcurrentRails::Promises.future { 42 }.
+      then { |v| v * 2 }.
+      on_resolution! { |_fulfilled, value, _reason| array.push(value) }.wait
+
+    assert_equal(84, array.pop)
+  end
+
+  test 'should execute callback on_rejection!' do
+    array = Concurrent::Array.new
+    ConcurrentRails::Promises.future { 2 / 0 }.
+      on_rejection! { |reason| array.push("Reason: #{reason}") }.wait
+
+    assert_equal('Reason: divided by 0', array.pop)
+  end
+
+  test 'should execute callback on_fulfillment!' do
+    array = Concurrent::Array.new
+    ConcurrentRails::Promises.future { 42 }.
+      then { |v| v * 2 }.
+      on_fulfillment! { |value| array.push(value) }.wait
+
+    assert_equal(84, array.pop)
   end
 end
