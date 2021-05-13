@@ -5,7 +5,7 @@ module ConcurrentRails
     def initialize(executor: :io, &block)
       @executor = executor
       @future   = run_on_rails(block)
-      # ActiveSupport::Deprecation.warn('Concurrent::Future is deprecated')
+      ActiveSupport::Deprecation.warn('Concurrent::Future is deprecated. See README for details')
     end
 
     def execute
@@ -16,10 +16,8 @@ module ConcurrentRails
 
     %i[value value!].each do |method_name|
       define_method method_name do
-        rails_wrapped do
-          ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
-            future.__send__(method_name)
-          end
+        permit_concurrent_loads do
+          future.__send__(method_name)
         end
       end
     end
@@ -38,6 +36,12 @@ module ConcurrentRails
 
     def rails_wrapped(&block)
       Rails.application.executor.wrap(&block)
+    end
+
+    def permit_concurrent_loads(&block)
+      rails_wrapped do
+        ActiveSupport::Dependencies.interlock.permit_concurrent_loads(&block)
+      end
     end
 
     attr_reader :executor, :future

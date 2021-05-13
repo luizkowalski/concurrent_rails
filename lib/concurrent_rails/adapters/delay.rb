@@ -19,7 +19,5 @@ module ConcurrentRails::Adapters
 
       self
     end
-
-    delegate :touch, to: :instance
   end
 end

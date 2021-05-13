@@ -32,6 +32,18 @@ module ConcurrentRails
       end
     end
 
+    def touch
+      @instance = rails_wrapped { instance.touch }
+
+      self
+    end
+
+    def wait(timeout = nil)
+      result = permit_concurrent_loads { instance.__send__(:wait_until_resolved, timeout) }
+
+      timeout ? result : self
+    end
+
     %i[on_fulfillment on_rejection on_resolution].each do |method|
       define_method(method) do |*args, &callback_task|
         rails_wrapped do
@@ -50,8 +62,7 @@ module ConcurrentRails
       end
     end
 
-    delegate :state, :reason, :rejected?, :resolved?, :fulfilled?, :wait,
-             to: :instance
+    delegate :state, :reason, :rejected?, :resolved?, :fulfilled?, to: :instance
 
     private
 
