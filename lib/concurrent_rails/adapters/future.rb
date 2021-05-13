@@ -19,9 +19,5 @@ module ConcurrentRails::Adapters
 
       self
     end
-
-    private
-
-    attr_reader :instance
   end
 end

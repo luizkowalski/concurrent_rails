@@ -21,9 +21,5 @@ module ConcurrentRails::Adapters
     end
 
     delegate :touch, to: :instance
-
-    private
-
-    attr_reader :instance
   end
 end

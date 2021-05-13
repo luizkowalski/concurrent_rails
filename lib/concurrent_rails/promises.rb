@@ -65,6 +65,6 @@ module ConcurrentRails
       end
     end
 
-    attr_reader :executor
+    attr_reader :executor, :instance
   end
 end
