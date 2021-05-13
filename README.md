@@ -64,7 +64,7 @@ Three methods will trigger a resolution: `#touch`, `#value` and `#wait`: `#touch
 
 ### Callbacks
 
-It is possible to set a callback to be executed after the resolution of the future. There are three different callbacks:
+Delayed and regular futures can set a callback to be executed after the resolution of the future. There are three different callbacks:
 
 * `on_resolution`: runs after the future is resolved and yields three parameters to the callback in the following order: `true/false` for future's fulfillment, `value` as the result of the future execution, and `reason`, that will be `nil` if the future fulfilled or the error that the future triggered.
 

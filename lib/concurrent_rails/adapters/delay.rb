@@ -20,25 +20,7 @@ module ConcurrentRails::Adapters
       self
     end
 
-    %i[on_fulfillment on_rejection on_resolution].each do |method|
-      define_method(method) do |*args, &callback_task|
-        rails_wrapped do
-          @instance = instance.__send__("#{method}_using", executor, *args, &callback_task)
-        end
-
-        self
-      end
-
-      define_method("#{method}!") do |*args, &callback_task|
-        rails_wrapped do
-          @instance = instance.__send__(:add_callback, "callback_#{method}", args, callback_task)
-        end
-
-        self
-      end
-    end
-
-    delegate :touch, :wait, to: :instance
+    delegate :touch, to: :instance
 
     private
 

@@ -84,4 +84,30 @@ class PromisesTest < ActiveSupport::TestCase
 
     assert_equal(value, timeout_string)
   end
+
+  test 'should execute callback on_resolution!' do
+    array = Concurrent::Array.new
+    ConcurrentRails::Promises.future { 42 }.
+      then { |v| v * 2 }.
+      on_resolution! { |_fulfilled, value, _reason| array.push(value) }.wait
+
+    assert_equal(84, array.pop)
+  end
+
+  test 'should execute callback on_rejection!' do
+    array = Concurrent::Array.new
+    ConcurrentRails::Promises.future { 2 / 0 }.
+      on_rejection! { |reason| array.push("Reason: #{reason}") }.wait
+
+    assert_equal('Reason: divided by 0', array.pop)
+  end
+
+  test 'should execute callback on_fulfillment!' do
+    array = Concurrent::Array.new
+    ConcurrentRails::Promises.future { 42 }.
+      then { |v| v * 2 }.
+      on_fulfillment! { |value| array.push(value) }.wait
+
+    assert_equal(84, array.pop)
+  end
 end
