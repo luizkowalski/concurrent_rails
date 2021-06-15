@@ -64,6 +64,8 @@ module ConcurrentRails
 
     delegate :state, :reason, :rejected?, :resolved?, :fulfilled?, to: :instance
 
+    attr_reader :executor
+
     private
 
     def rails_wrapped(&block)
@@ -76,6 +78,6 @@ module ConcurrentRails
       end
     end
 
-    attr_reader :executor, :instance
+    attr_reader :instance
   end
 end

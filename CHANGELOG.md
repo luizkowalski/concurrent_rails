@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1
+
+* Added `ConcurrentRails::Testing` tool
+* Dropped support for Ruby 2.5
+* Added deprecation warning for `ConcurrentRails::Future`
+* Wrapped `touch` and `wait` on Rails' executor as well
+
 ## 0.2.0
 
 * Added delayed futures
@@ -30,7 +37,7 @@
 
 ## 0.1.4
 
-* Fixed `ConcurrentRails::Promises`'s `future` factory so it handles parameters and block correctly
+* Fixed `ConcurrentRails::Promises`'s `future` factory so it handles parameters and blocks correctly
 
 ## 0.1.3
 
@@ -38,7 +45,7 @@
 
 ## 0.1.2
 
-* Fixed depencies for development
+* Fixed dependencies for development
 
 ## 0.1.1
 
