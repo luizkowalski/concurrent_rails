@@ -1,6 +1,4 @@
 # frozen_string_literal: true
 
-module ConcurrentRails
-  class Railtie < ::Rails::Railtie
-  end
+class ConcurrentRails::Railtie < ::Rails::Railtie
 end
