@@ -10,7 +10,7 @@ Layout/DotPosition:
   EnforcedStyle: trailing
 
 Style/ClassAndModuleChildren:
-  Enabled: false
+  EnforcedStyle: compact
 
 Style/Documentation:
   Enabled: false

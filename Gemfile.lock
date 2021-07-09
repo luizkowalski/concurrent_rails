@@ -131,10 +131,10 @@ GEM
       rake (>= 0.13)
       thor (~> 1.0)
     rainbow (3.0.0)
-    rake (13.0.3)
+    rake (13.0.5)
     regexp_parser (2.1.1)
     rexml (3.2.5)
-    rubocop (1.18.2)
+    rubocop (1.18.3)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -147,7 +147,7 @@ GEM
       parser (>= 3.0.1.1)
     rubocop-minitest (0.14.0)
       rubocop (>= 0.90, < 2.0)
-    rubocop-performance (1.11.3)
+    rubocop-performance (1.11.4)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.11.0)
@@ -181,4 +181,4 @@ DEPENDENCIES
   sqlite3 (~> 1.4)
 
 BUNDLED WITH
-   2.2.21
+   2.2.22
