@@ -4,17 +4,17 @@ class ConcurrentRails::Testing
   class << self
     attr_reader :execution_mode
 
-    %i[immediate fake].each do |exec_method|
-      define_method("#{exec_method}!") do |&task|
-        @execution_mode = exec_method
+    %i[immediate fake].each do |test_mode|
+      define_method("#{test_mode}!") do |&task|
+        @execution_mode = test_mode
         result = task.call
         @execution_mode = :real
 
         result
       end
 
-      define_method("#{exec_method}?") do
-        execution_mode == exec_method
+      define_method("#{test_mode}?") do
+        execution_mode == test_mode
       end
     end
 
