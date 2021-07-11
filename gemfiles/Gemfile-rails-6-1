@@ -5,4 +5,3 @@ source "https://rubygems.org"
 gemspec path: ".."
 
 gem "rails", github: "rails/rails", branch: "6-1-stable"
-gem "sqlite3", "~> 1.4"
