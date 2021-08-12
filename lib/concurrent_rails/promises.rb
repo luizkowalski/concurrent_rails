@@ -15,7 +15,7 @@ class ConcurrentRails::Promises
   %i[value value!].each do |method_name|
     define_method(method_name) do |timeout = nil, timeout_value = nil|
       permit_concurrent_loads do
-        instance.__send__(method_name, timeout, timeout_value)
+        instance.public_send(method_name, timeout, timeout_value)
       end
     end
   end
@@ -24,7 +24,7 @@ class ConcurrentRails::Promises
     define_method(chainable) do |*args, &task|
       method = "#{chainable}_on"
       @instance = rails_wrapped do
-        instance.__send__(method, executor, *args, &task)
+        instance.public_send(method, executor, *args, &task)
       end
 
       self
