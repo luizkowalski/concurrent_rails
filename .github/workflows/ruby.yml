@@ -22,6 +22,8 @@ jobs:
           - 2.7
           - 3.0
         exclude:
+          - ruby: 2.6
+            gemfile: gemfiles/Gemfile-rails-7
           - ruby: 3.0
             gemfile: gemfiles/Gemfile-rails-5-0
           - ruby: 3.0

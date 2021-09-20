@@ -4,5 +4,5 @@ source "https://rubygems.org"
 
 gemspec path: ".."
 
-gem "rails", github: "rails/rails", branch: "master"
+gem "rails", github: "rails/rails", branch: "main"
 gem "sqlite3", "~> 1.4"
