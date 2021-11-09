@@ -1,5 +1,12 @@
 # Changelog
 
+# 0.3.0
+
+* Updated dependencies
+* Added Rails 7 to the test matrix
+* Changed `ConcurrentRails::Testing` behavior: methods with bang now set the strategy globally while methods without bang will set the strategy just for the given block
+* Enforcing `Style/ClassAndModuleChildren` rule to compact
+
 ## 0.2.1
 
 * Added `ConcurrentRails::Testing` tool
