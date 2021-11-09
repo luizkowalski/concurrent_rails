@@ -38,7 +38,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-        bundler: ${{ env.BUNDLER_VERSION || 'latest' }}
+        cache-version: 2
+        bundler: '2.2.29'
     - name: Rubocop
       run: bundle exec rubocop -D
     - name: Run tests
