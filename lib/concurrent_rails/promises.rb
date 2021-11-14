@@ -3,79 +3,81 @@
 require 'concurrent_rails/future_adapter'
 require 'concurrent_rails/delay_adapter'
 
-class ConcurrentRails::Promises
-  include Concurrent::Promises::FactoryMethods
-  include ConcurrentRails::DelayAdapter
-  include ConcurrentRails::FutureAdapter
+module ConcurrentRails
+  class Promises
+    include Concurrent::Promises::FactoryMethods
+    include ConcurrentRails::DelayAdapter
+    include ConcurrentRails::FutureAdapter
 
-  def initialize(executor)
-    @executor = executor
-  end
+    def initialize(executor)
+      @executor = executor
+    end
 
-  %i[value value!].each do |method_name|
-    define_method(method_name) do |timeout = nil, timeout_value = nil|
-      permit_concurrent_loads do
-        instance.public_send(method_name, timeout, timeout_value)
+    %i[value value!].each do |method_name|
+      define_method(method_name) do |timeout = nil, timeout_value = nil|
+        permit_concurrent_loads do
+          instance.public_send(method_name, timeout, timeout_value)
+        end
       end
     end
-  end
 
-  %i[then chain].each do |chainable|
-    define_method(chainable) do |*args, &task|
-      method = "#{chainable}_on"
-      @instance = rails_wrapped do
-        instance.public_send(method, executor, *args, &task)
+    %i[then chain].each do |chainable|
+      define_method(chainable) do |*args, &task|
+        method = "#{chainable}_on"
+        @instance = rails_wrapped do
+          instance.public_send(method, executor, *args, &task)
+        end
+
+        self
       end
+    end
+
+    def touch
+      @instance = rails_wrapped { instance.touch }
 
       self
     end
-  end
 
-  def touch
-    @instance = rails_wrapped { instance.touch }
+    def wait(timeout = nil)
+      result = permit_concurrent_loads { instance.__send__(:wait_until_resolved, timeout) }
 
-    self
-  end
+      timeout ? result : self
+    end
 
-  def wait(timeout = nil)
-    result = permit_concurrent_loads { instance.__send__(:wait_until_resolved, timeout) }
+    %i[on_fulfillment on_rejection on_resolution].each do |method|
+      define_method(method) do |*args, &callback_task|
+        rails_wrapped do
+          @instance = instance.__send__("#{method}_using", executor, *args, &callback_task)
+        end
 
-    timeout ? result : self
-  end
+        self
+      end
 
-  %i[on_fulfillment on_rejection on_resolution].each do |method|
-    define_method(method) do |*args, &callback_task|
+      define_method("#{method}!") do |*args, &callback_task|
+        rails_wrapped do
+          @instance = instance.__send__(:add_callback, "callback_#{method}", args, callback_task)
+        end
+
+        self
+      end
+    end
+
+    delegate :state, :reason, :rejected?, :resolved?, :fulfilled?, to: :instance
+
+    attr_reader :executor
+
+    private
+
+    def rails_wrapped(&block)
+      Rails.application.executor.wrap(&block)
+    end
+
+    def permit_concurrent_loads(&block)
       rails_wrapped do
-        @instance = instance.__send__("#{method}_using", executor, *args, &callback_task)
+        ActiveSupport::Dependencies.interlock.permit_concurrent_loads(&block)
       end
-
-      self
     end
 
-    define_method("#{method}!") do |*args, &callback_task|
-      rails_wrapped do
-        @instance = instance.__send__(:add_callback, "callback_#{method}", args, callback_task)
-      end
-
-      self
-    end
+    attr_reader :instance
   end
-
-  delegate :state, :reason, :rejected?, :resolved?, :fulfilled?, to: :instance
-
-  attr_reader :executor
-
-  private
-
-  def rails_wrapped(&block)
-    Rails.application.executor.wrap(&block)
-  end
-
-  def permit_concurrent_loads(&block)
-    rails_wrapped do
-      ActiveSupport::Dependencies.interlock.permit_concurrent_loads(&block)
-    end
-  end
-
-  attr_reader :instance
 end
