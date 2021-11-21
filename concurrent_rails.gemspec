@@ -26,4 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-performance', '>= 1.10'
 
   spec.required_ruby_version = '>= 2.6'
+  spec.metadata = {
+    'rubygems_mfa_required' => 'true'
+  }
 end
