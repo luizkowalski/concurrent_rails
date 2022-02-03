@@ -81,7 +81,7 @@ GEM
     erubi (1.10.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    i18n (1.8.11)
+    i18n (1.9.1)
       concurrent-ruby (~> 1.0)
     io-wait (0.2.1)
     loofah (2.13.0)
@@ -157,7 +157,7 @@ GEM
     rake (13.0.6)
     regexp_parser (2.2.0)
     rexml (3.2.5)
-    rubocop (1.25.0)
+    rubocop (1.25.1)
       parallel (~> 1.10)
       parser (>= 3.1.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -168,7 +168,7 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.15.1)
       parser (>= 3.0.1.1)
-    rubocop-minitest (0.17.0)
+    rubocop-minitest (0.17.1)
       rubocop (>= 0.90, < 2.0)
     rubocop-performance (1.13.2)
       rubocop (>= 1.7.0, < 2.0)
@@ -184,7 +184,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.5.3)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   ruby
