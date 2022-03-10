@@ -2,7 +2,7 @@
 
 ![status](https://github.com/luizkowalski/concurrent_rails/actions/workflows/ruby.yml/badge.svg?branch=master)
 
-Multithread is hard. [concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby) did an amazing job implementing the concepts of multithread in the Ruby world. The problem is that Rails doesn't play nice with it. Rails have a complex way of managing threads called Executor and concurrent-ruby (most specifically, [Future](https://github.com/ruby-concurrency/concurrent-ruby/blob/master/docs-source/future.md)) does not work seamlessly with it.
+Multithread is hard. [concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby) did an amazing job implementing the concepts of multithread in the Ruby world. The problem is that Rails doesn't play nice with it. Rails has a complex way of managing threads called Executor and concurrent-ruby (most specifically, [Future](https://github.com/ruby-concurrency/concurrent-ruby/blob/master/docs-source/future.md)) does not work seamlessly with it.
 
 The goal of this gem is to provide a simple library that allows the developer to work with Futures without having to care about Rails's Executor and the whole pack of problems that come with it: autoload, thread pools, active record connections, etc.
 
