@@ -13,14 +13,14 @@ class PromisesTest < ActiveSupport::TestCase
     future = ConcurrentRails::Promises.future { 42 }
     future.value
 
-    assert(future.resolved?)
+    assert_predicate(future, :resolved?)
   end
 
   test 'should retrun `resolved?` with failed operation' do
     future = ConcurrentRails::Promises.future { 2 / 0 }
     future.value
 
-    assert(future.resolved?)
+    assert_predicate(future, :resolved?)
   end
 
   test 'should chain futures with `then`' do

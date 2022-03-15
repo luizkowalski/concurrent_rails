@@ -14,7 +14,7 @@ class MultiTest < ActiveSupport::TestCase
     )
 
     assert_equal([42, :multi_test], multi.compute)
-    assert(multi.complete?)
+    assert_predicate(multi, :complete?)
     assert_empty(multi.errors)
   end
 
@@ -25,7 +25,7 @@ class MultiTest < ActiveSupport::TestCase
     )
 
     assert_equal([42, nil], multi.compute)
-    assert(multi.complete?)
+    assert_predicate(multi, :complete?)
     assert_not_empty(multi.errors)
   end
 
@@ -47,6 +47,6 @@ class MultiTest < ActiveSupport::TestCase
     )
 
     assert_equal([42, :multi_test], multi.compute)
-    assert(multi.complete?)
+    assert_predicate(multi, :complete?)
   end
 end
