@@ -84,6 +84,7 @@ GEM
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     json (2.6.2)
+    language_server-protocol (3.16.0.3)
     loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -117,9 +118,12 @@ GEM
     nokogiri (1.13.8)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
+    nokogiri (1.13.8-arm64-darwin)
+      racc (~> 1.4)
     parallel (1.22.1)
     parser (3.1.2.0)
       ast (~> 2.4.1)
+    prettier_print (0.1.0)
     racc (1.6.0)
     rack (2.2.4)
     rack-test (2.0.2)
@@ -171,9 +175,16 @@ GEM
     rubocop-performance (1.14.3)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
+    ruby-lsp (0.2.1)
+      language_server-protocol
+      sorbet-runtime
+      syntax_tree (>= 2.4)
     ruby-progressbar (1.11.0)
+    sorbet-runtime (0.5.10286)
     sqlite3 (1.4.4)
     strscan (3.0.4)
+    syntax_tree (3.3.0)
+      prettier_print
     thor (1.2.1)
     timeout (0.3.0)
     tzinfo (2.0.5)
@@ -193,6 +204,7 @@ DEPENDENCIES
   rubocop (>= 1.33)
   rubocop-minitest (>= 0.21)
   rubocop-performance (>= 1.14)
+  ruby-lsp
   sqlite3 (~> 1.4)
 
 BUNDLED WITH
