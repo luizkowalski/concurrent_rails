@@ -118,8 +118,6 @@ GEM
     nokogiri (1.13.8)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.13.8-x86_64-darwin)
-      racc (~> 1.4)
     parallel (1.22.1)
     parser (3.1.2.1)
       ast (~> 2.4.1)
@@ -183,7 +181,6 @@ GEM
     sorbet-runtime (0.5.10415)
     sqlite3 (1.5.0)
       mini_portile2 (~> 2.8.0)
-    sqlite3 (1.5.0-x86_64-darwin)
     strscan (3.0.4)
     syntax_tree (3.5.0)
       prettier_print
@@ -199,16 +196,15 @@ GEM
 
 PLATFORMS
   ruby
-  x86_64-darwin-20
 
 DEPENDENCIES
   concurrent_rails!
-  minitest-reporters (~> 1.4)
-  rubocop (>= 1.30)
-  rubocop-minitest (>= 0.20)
+  minitest-reporters (~> 1.5)
+  rubocop (>= 1.33)
+  rubocop-minitest (>= 0.21)
   rubocop-performance (>= 1.14)
   ruby-lsp (>= 0.3)
   sqlite3 (~> 1.4)
 
 BUNDLED WITH
-   2.3.10
+   2.3.22
