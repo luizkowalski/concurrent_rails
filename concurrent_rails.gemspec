@@ -21,9 +21,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '>= 5.2'
 
   spec.add_development_dependency 'minitest-reporters', '~> 1.5'
-  spec.add_development_dependency 'rubocop', '>= 1.33'
+  spec.add_development_dependency 'rubocop', '>= 1.42'
   spec.add_development_dependency 'rubocop-minitest', '>= 0.21'
-  spec.add_development_dependency 'rubocop-performance', '>= 1.14'
+  spec.add_development_dependency 'rubocop-performance', '>= 1.15'
   spec.add_development_dependency 'ruby-lsp', '>= 0.3'
 
   spec.required_ruby_version = '>= 2.7'
