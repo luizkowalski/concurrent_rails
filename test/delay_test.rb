@@ -11,9 +11,11 @@ class DelayTest < ActiveSupport::TestCase
 
   test 'should run when touched' do
     touched_delay = ConcurrentRails::Promises.delay { 42 }
+
     assert_equal(:pending, touched_delay.state)
 
     touched_delay.touch
+
     assert_equal(42, touched_delay.value)
   end
 
