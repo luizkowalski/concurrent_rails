@@ -15,14 +15,13 @@ Gem::Specification.new do |spec|
   spec.metadata['homepage_uri']    = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
   spec.metadata['changelog_uri']   = 'https://github.com/luizkowalski/concurrent_rails/blob/master/CHANGELOG.md'
-
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
   spec.add_dependency 'rails', '>= 5.2'
 
   spec.add_development_dependency 'minitest-reporters', '~> 1.5'
-  spec.add_development_dependency 'rubocop', '>= 1.42'
-  spec.add_development_dependency 'rubocop-minitest', '>= 0.21'
+  spec.add_development_dependency 'rubocop', '>= 1.43'
+  spec.add_development_dependency 'rubocop-minitest', '= 0.25'
   spec.add_development_dependency 'rubocop-performance', '>= 1.15'
   spec.add_development_dependency 'ruby-lsp', '>= 0.3'
 
