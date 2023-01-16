@@ -177,7 +177,7 @@ GEM
       syntax_tree (>= 4.0.2, < 5.0.0)
     ruby-progressbar (1.11.0)
     sorbet-runtime (0.5.10601)
-    sqlite3 (1.5.4)
+    sqlite3 (1.6.0)
       mini_portile2 (~> 2.8.0)
     syntax_tree (4.3.0)
       prettier_print (>= 1.0.2)
@@ -201,7 +201,7 @@ DEPENDENCIES
   rubocop-minitest (>= 0.21)
   rubocop-performance (>= 1.15)
   ruby-lsp (>= 0.3)
-  sqlite3 (~> 1.5)
+  sqlite3 (~> 1.6)
 
 BUNDLED WITH
    2.3.22
