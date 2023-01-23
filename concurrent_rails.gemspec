@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-thread_safety', '~> 0.4'
   spec.add_development_dependency 'ruby-lsp', '>= 0.3'
 
-  spec.required_ruby_version = '>= 2.7'
+  spec.required_ruby_version = '>= 3.0'
   spec.metadata = {
     'rubygems_mfa_required' => 'true'
   }
