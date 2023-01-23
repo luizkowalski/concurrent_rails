@@ -166,7 +166,7 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.24.1)
       parser (>= 3.1.1.0)
-    rubocop-minitest (0.25.0)
+    rubocop-minitest (0.26.1)
       rubocop (>= 0.90, < 2.0)
     rubocop-performance (1.15.2)
       rubocop (>= 1.7.0, < 2.0)
@@ -200,7 +200,7 @@ DEPENDENCIES
   concurrent_rails!
   minitest-reporters (~> 1.5)
   rubocop (>= 1.43)
-  rubocop-minitest (= 0.25)
+  rubocop-minitest (= 0.26.1)
   rubocop-performance (>= 1.15)
   rubocop-thread_safety (~> 0.4)
   ruby-lsp (>= 0.3)
