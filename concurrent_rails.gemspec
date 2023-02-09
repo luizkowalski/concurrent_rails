@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.metadata['changelog_uri']   = 'https://github.com/luizkowalski/concurrent_rails/blob/master/CHANGELOG.md'
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
-  spec.add_dependency 'rails', '>= 5.2'
+  spec.add_dependency 'railties', '>= 5.2'
 
   spec.add_development_dependency 'minitest-reporters', '~> 1.5'
   spec.add_development_dependency 'rubocop', '>= 1.43'
