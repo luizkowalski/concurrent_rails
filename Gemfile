@@ -7,6 +7,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gemspec
 
 gem 'sqlite3', '~> 1.6'
+gem 'activerecord' # needed for app_test test case
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
