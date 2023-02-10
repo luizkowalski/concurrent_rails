@@ -13,9 +13,9 @@ jobs:
       matrix:
         gemfile:
           - Gemfile
-          - gemfiles/Gemfile-rails-5-2
-          - gemfiles/Gemfile-rails-6-0
-          - gemfiles/Gemfile-rails-6-1
+          - Gemfile-rails-5-2
+          - Gemfile-rails-6-0
+          - Gemfile-rails-6-1
           # - gemfiles/Gemfile-rails-7-0 # This is the main version now
         ruby:
           - '3.0'
@@ -23,23 +23,23 @@ jobs:
           - '3.2'
         exclude:
           - ruby: '3.0'
-            gemfile: Gemfile-rails-5-0
+            gemfile: gemfiles/Gemfile-rails-5-0
           - ruby: '3.1'
-            gemfile: Gemfile-rails-5-0
+            gemfile: gemfiles/Gemfile-rails-5-0
           - ruby: '3.2'
-            gemfile: Gemfile-rails-5-0
+            gemfile: gemfiles/Gemfile-rails-5-0
           - ruby: '3.0'
-            gemfile: Gemfile-rails-5-1
+            gemfile: gemfiles/Gemfile-rails-5-1
           - ruby: '3.1'
-            gemfile: Gemfile-rails-5-1
+            gemfile: gemfiles/Gemfile-rails-5-1
           - ruby: '3.2'
-            gemfile: Gemfile-rails-5-0
+            gemfile: gemfiles/Gemfile-rails-5-0
           - ruby: '3.0'
-            gemfile: Gemfile-rails-5-2
+            gemfile: gemfiles/Gemfile-rails-5-2
           - ruby: '3.1'
-            gemfile: Gemfile-rails-5-2
+            gemfile: gemfiles/Gemfile-rails-5-2
           - ruby: '3.2'
-            gemfile: Gemfile-rails-5-2
+            gemfile: gemfiles/Gemfile-rails-5-2
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
