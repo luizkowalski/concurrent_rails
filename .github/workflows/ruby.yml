@@ -13,9 +13,9 @@ jobs:
       matrix:
         gemfile:
           - Gemfile
-          - Gemfile-rails-5-2
-          - Gemfile-rails-6-0
-          - Gemfile-rails-6-1
+          - gemfiles/Gemfile-rails-5-2
+          - gemfiles/Gemfile-rails-6-0
+          - gemfiles/Gemfile-rails-6-1
           # - gemfiles/Gemfile-rails-7-0 # This is the main version now
         ruby:
           - '3.0'
@@ -41,7 +41,7 @@ jobs:
           - ruby: '3.2'
             gemfile: gemfiles/Gemfile-rails-5-2
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
-      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
+      BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}.gemfile
     steps:
     - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
