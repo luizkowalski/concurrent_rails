@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'minitest-reporters', '~> 1.5'
   spec.add_development_dependency 'rubocop', '>= 1.43'
-  spec.add_development_dependency 'rubocop-minitest', '= 0.27.0'
+  spec.add_development_dependency 'rubocop-minitest', '= 0.28.0'
   spec.add_development_dependency 'rubocop-performance', '>= 1.15'
   spec.add_development_dependency 'rubocop-thread_safety', '~> 0.4'
   spec.add_development_dependency 'ruby-lsp', '>= 0.3'
