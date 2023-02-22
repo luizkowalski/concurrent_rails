@@ -20,11 +20,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'railties', '>= 5.2'
 
   spec.add_development_dependency 'minitest-reporters', '~> 1.5'
-  spec.add_development_dependency 'rubocop', '>= 1.43'
-  spec.add_development_dependency 'rubocop-minitest', '= 0.28.0'
-  spec.add_development_dependency 'rubocop-performance', '>= 1.15'
+  spec.add_development_dependency 'rubocop', '>= 1.46'
+  spec.add_development_dependency 'rubocop-minitest', '>= 0.28.0'
+  spec.add_development_dependency 'rubocop-performance', '>= 1.16'
   spec.add_development_dependency 'rubocop-thread_safety', '~> 0.4'
-  spec.add_development_dependency 'ruby-lsp', '>= 0.3'
+  spec.add_development_dependency 'ruby-lsp', '>= 0.4'
 
   spec.required_ruby_version = '>= 3.0'
   spec.metadata = {

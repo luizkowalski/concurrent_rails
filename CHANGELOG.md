@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.4.1
+
+* The gem no longer depends on `rails`. Instead, it depends on `railties`.
+
 # 0.4.0
 
 * Dropped support to Ruby 2.6 as it has reached EOL 6 months ago.
