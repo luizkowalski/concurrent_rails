@@ -3,7 +3,7 @@
 module ConcurrentRails
   class Multi
     def self.enqueue(*actions, executor: :io)
-      raise ArgumentError, '#enqueue accepts `Proc`s only' unless actions.all?(Proc)
+      raise ArgumentError, "#enqueue accepts `Proc`s only" unless actions.all?(Proc)
 
       new(actions, executor).enqueue
     end

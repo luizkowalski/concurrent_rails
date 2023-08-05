@@ -5,6 +5,9 @@ require:
 
 AllCops:
   NewCops: enable
+  UseCache: true
+  SuggestExtensions: true
+  CacheRootDirectory: "tmp/rubocop_cache"
   TargetRubyVersion: 3.0
 
 Layout/DotPosition:
@@ -12,6 +15,9 @@ Layout/DotPosition:
 
 Style/ClassAndModuleChildren:
   EnforcedStyle: nested
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
 
 Style/Documentation:
   Enabled: false

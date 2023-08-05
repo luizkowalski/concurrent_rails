@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class MultiTest < ActiveSupport::TestCase
-  test 'should only accepts Procs' do
+  test "should only accepts Procs" do
     assert_raises(ArgumentError) { ConcurrentRails::Multi.enqueue(42) }
   end
 
-  test 'multiple actions without errors' do
+  test "multiple actions without errors" do
     multi = ConcurrentRails::Multi.enqueue(
       -> { 42 },
       -> { :multi_test }
@@ -18,7 +18,7 @@ class MultiTest < ActiveSupport::TestCase
     assert_empty(multi.errors)
   end
 
-  test 'multiple actions with errors' do
+  test "multiple actions with errors" do
     multi = ConcurrentRails::Multi.enqueue(
       -> { 42 },
       -> { 2 / 0 }
@@ -29,7 +29,7 @@ class MultiTest < ActiveSupport::TestCase
     assert_not_empty(multi.errors)
   end
 
-  test 'should rais error on compute!' do
+  test "should rais error on compute!" do
     multi = ConcurrentRails::Multi.enqueue(
       -> { 42 },
       -> { 2 / 0 }
@@ -38,7 +38,7 @@ class MultiTest < ActiveSupport::TestCase
     assert_raises(ZeroDivisionError) { multi.compute! }
   end
 
-  test 'multiple actions with executor' do
+  test "multiple actions with executor" do
     pool = ::Concurrent::CachedThreadPool.new
     multi = ConcurrentRails::Multi.enqueue(
       -> { 42 },
