@@ -5,7 +5,7 @@ module ConcurrentRails
     def initialize(executor: :io, &block)
       @executor = executor
       @future   = run_on_rails(block)
-      ActiveSupport::Deprecation.warn('ConcurrentRails::Future is deprecated. See README for details')
+      ActiveSupport::Deprecation.warn("ConcurrentRails::Future is deprecated. See README for details")
     end
 
     def execute

@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.5.0
+
+* Dropped support for Rails 5.2
+
 # 0.4.1
 
 * The gem no longer depends on `rails`. Instead, it depends on `railties`.
