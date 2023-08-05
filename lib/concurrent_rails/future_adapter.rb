@@ -5,17 +5,17 @@ module ConcurrentRails
     extend ActiveSupport::Concern
 
     class_methods do
-      def future(...)
-        future_on(...)
+      def future(*args, &task)
+        future_on(:io, *args, &task)
       end
 
-      def future_on(...)
-        new(executor).future_on_rails(...)
+      def future_on(executor, *args, &task)
+        new(executor).future_on_rails(*args, &task)
       end
     end
 
-    def future_on_rails(...)
-      @instance = rails_wrapped { future_on(...) }
+    def future_on_rails(*args, &task)
+      @instance = rails_wrapped { future_on(executor, *args, &task) }
 
       self
     end

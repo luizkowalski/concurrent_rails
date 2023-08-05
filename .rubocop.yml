@@ -21,3 +21,6 @@ Style/StringLiterals:
 
 Style/Documentation:
   Enabled: false
+
+Style/ArgumentsForwarding:
+  Enabled: false

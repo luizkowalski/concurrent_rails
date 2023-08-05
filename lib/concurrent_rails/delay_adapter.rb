@@ -5,17 +5,17 @@ module ConcurrentRails
     extend ActiveSupport::Concern
 
     class_methods do
-      def delay(...)
-        delay_on(...)
+      def delay(*args, &task)
+        delay_on(:io, *args, &task)
       end
 
-      def delay_on(...)
-        new(executor).delay_on_rails(...)
+      def delay_on(executor, *args, &task)
+        new(executor).delay_on_rails(*args, &task)
       end
     end
 
-    def delay_on_rails(...)
-      @instance = rails_wrapped { delay_on(...) }
+    def delay_on_rails(*args, &task)
+      @instance = rails_wrapped { delay_on(executor, *args, &task) }
 
       self
     end

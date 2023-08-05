@@ -25,9 +25,9 @@ module ConcurrentRails
     end
 
     module TestingFuture
-      def future(...)
+      def future(*args, &task)
         if ConcurrentRails::Testing.immediate?
-          future_on(...)
+          future_on(:immediate, *args, &task)
         elsif ConcurrentRails::Testing.fake?
           yield
         else
