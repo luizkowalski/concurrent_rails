@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.5.1
+
+* Yanked 0.5.0
+
 # 0.5.0
 
 * Dropped support for Rails 5.2
