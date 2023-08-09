@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   spec.add_dependency "railties", ">= 6.0"
+  spec.add_dependency "zeitwerk", "~> 2.6"
 
   spec.required_ruby_version = ">= 3.0"
   spec.metadata = {

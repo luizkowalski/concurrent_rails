@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "concurrent_rails/future_adapter"
-require "concurrent_rails/delay_adapter"
-
 module ConcurrentRails
   class Promises
     include Concurrent::Promises::FactoryMethods
