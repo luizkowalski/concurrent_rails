@@ -174,16 +174,18 @@ irb(main):007:0> multi.errors
 It is worth mention that a failed proc will return `nil`.
 
 ## Testing
+
 If you are using RSpec, you will notice that it might not play well with threads. ActiveRecord opens a database connection for every thread and since RSpec tests are wrapped in a transaction, by the time your promise tries to access something on the database, for example, a user, gems like Database Cleaner probably already triggered and deleted the user, resulting in `ActiveRecord::RecordNotFound` errors. You have a couple of solutions like disable transactional fixtures if you are using it or update the Database Cleaner strategy (that will result in much slower tests).
 Since none of these solutions were satisfactory to me, I created `ConcurrentRails::Testing` with two strategies: `immediate` and `fake`. When you wrap a Promise's `future` with `immediate`, the executor gets replaced from `:io` to `:immediate`. It still returns a promise anyway. This is not the case with `fake` strategy: it executes the task outside the `ConcurrentRails` engine and returns whatever `.value` would return:
 
 `immediate` strategy:
+
 ```ruby
 irb(main):001:1* result = ConcurrentRails::Testing.immediate do
 irb(main):002:1*       ConcurrentRails::Promises.future { 42 }
 irb(main):003:0> end
 =>
-#<ConcurrentRails::Promises:0x000000013e5fc870 
+#<ConcurrentRails::Promises:0x000000013e5fc870
 ...
 irb(main):004:0> result.class
 => ConcurrentRails::Promises # <-- Still a `ConcurrentRails::Promises` class
@@ -217,7 +219,7 @@ For more information on how Futures work and how Rails handle multithread check 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'concurrent_rails', '~> 0.2.1'
+gem 'concurrent_rails', '~> 0.5.1'
 ```
 
 And then execute:
