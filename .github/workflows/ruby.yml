@@ -12,9 +12,9 @@ jobs:
     strategy:
       matrix:
         gemfile:
-          - Gemfile
+          - Gemfile # latest Rails
           - gemfiles/Gemfile-rails-6-1
-          # - gemfiles/Gemfile-rails-7-0 # This is the main version now
+          - gemfiles/Gemfile-rails-7-0
         ruby:
           - '3.0'
           - '3.1'
