@@ -14,11 +14,11 @@ module ConcurrentRails
           result
         end
 
-        define_method("#{test_mode}!") do
+        define_method(:"#{test_mode}!") do
           @execution_mode = test_mode
         end
 
-        define_method("#{test_mode}?") do
+        define_method(:"#{test_mode}?") do
           execution_mode == test_mode
         end
       end
