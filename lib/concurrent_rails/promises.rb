@@ -65,8 +65,8 @@ module ConcurrentRails
 
     private
 
-    def rails_wrapped(&block)
-      Rails.application.executor.wrap(&block)
+    def rails_wrapped(&)
+      Rails.application.executor.wrap(&)
     end
 
     def permit_concurrent_loads(&block)

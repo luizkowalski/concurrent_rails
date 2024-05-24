@@ -16,7 +16,7 @@ module ConcurrentRails
 
     def enqueue
       @futures = actions.map do |action|
-        f = ConcurrentRails::Future.new(executor: executor, &action)
+        f = ConcurrentRails::Future.new(executor:, &action)
         f.add_observer(self)
         f.execute
       end

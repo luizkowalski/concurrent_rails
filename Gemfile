@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Specify your gem's dependencies in concurrent_rails.gemspec.
 gemspec
 
-gem "activerecord", "< 8" # needed for app_test test case
+gem "activerecord", "~> 7.1" # needed for app_test test case
 gem "sqlite3", "1.7.3"
 
 gem "minitest-reporters"

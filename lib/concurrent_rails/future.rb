@@ -28,14 +28,14 @@ module ConcurrentRails
 
     def run_on_rails(block)
       @future = rails_wrapped do
-        Concurrent::Future.new(executor: executor) do
+        Concurrent::Future.new(executor:) do
           rails_wrapped(&block)
         end
       end
     end
 
-    def rails_wrapped(&block)
-      Rails.application.executor.wrap(&block)
+    def rails_wrapped(&)
+      Rails.application.executor.wrap(&)
     end
 
     def permit_concurrent_loads(&block)
