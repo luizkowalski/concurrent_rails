@@ -10,8 +10,6 @@ require "rails/test_unit/reporter"
 
 Minitest::Reporters.use!
 
-ActiveSupport::Deprecation.silenced = true
-
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 ActiveRecord::Schema.verbose = false
 load "#{Rails.root}/db/schema.rb"
