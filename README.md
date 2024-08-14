@@ -1,6 +1,6 @@
 # ConcurrentRails
 
-![status](https://github.com/luizkowalski/concurrent_rails/actions/workflows/ruby.yml/badge.svg?branch=master)
+![status](https://github.com/luizkowalski/concurrent_rails/actions/workflows/ruby.yml/badge.svg?branch=main)
 
 Multithread is hard. [concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby) did an amazing job implementing the concepts of multithread in the Ruby world. The problem is that Rails doesn't play nice with it. Rails has a complex way of managing threads called Executor and concurrent-ruby (most specifically, [Future](https://github.com/ruby-concurrency/concurrent-ruby/blob/master/docs-source/future.md)) does not work seamlessly with it.
 
@@ -8,7 +8,7 @@ The goal of this gem is to provide a simple library that allows the developer to
 
 ## Usage
 
-This library provides three classes that will help you run tasks in parallel: `ConcurrentRails::Promises`,  `ConcurrentRails::Future` ([in process of being deprecated by concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby#deprecated)) and `ConcurrentRails::Multi`
+This library provides three classes that will help you run tasks in parallel: `ConcurrentRails::Promises`,  `ConcurrentRails::Future` ([in the process of being deprecated by concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby#deprecated)) and `ConcurrentRails::Multi`
 
 ### Promises
 

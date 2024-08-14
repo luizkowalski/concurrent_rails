@@ -8,7 +8,6 @@ gemspec
 
 gem "activerecord", "< 8" # needed for app_test test case
 gem "sqlite3"
-
 gem "minitest-reporters"
 
 gem "rubocop"
