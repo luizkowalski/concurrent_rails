@@ -3,7 +3,7 @@
 ## 0.6.0
 
 - Added tests for Rails 7.2
-- Removed deprecated `ConcurrentRails::Future` class and `ConcurrentRails::Multi`
+- Removed deprecated `ConcurrentRails::Future` class and `ConcurrentRails::Multi`. Use `ConcurrentRails::Promises` instead.
 
 ## 0.5.1
 
