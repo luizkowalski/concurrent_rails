@@ -3,9 +3,9 @@
 class DummyService
   class << self
     def do_something
-      future = ConcurrentRails::Future.new do
+      future = ConcurrentRails::Promises.future do
         42
-      end.execute
+      end
 
       future.value
     end

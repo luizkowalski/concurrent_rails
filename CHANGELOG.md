@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0
+
+- Added tests for Rails 7.2
+- Removed deprecated `ConcurrentRails::Future` class and `ConcurrentRails::Multi`. Use `ConcurrentRails::Promises` instead.
+
 ## 0.5.1
 
 - Yanked 0.5.0
@@ -14,7 +19,7 @@
 
 ## 0.4.0
 
-- Dropped support to Ruby 2.6 as it has reached EOL 6 months ago.
+- Dropped support to Ruby 2.6 as it reached EOL 6 months ago.
 
 ## 0.3.0
 
@@ -56,7 +61,7 @@
 ## 0.1.5
 
 - Added `value!` to `ConcurrentRails::Future`
-- Updatede development dependencies
+- Updated development dependencies
 
 ## 0.1.4
 
