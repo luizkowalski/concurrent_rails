@@ -7,7 +7,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gemspec
 
 gem "activerecord", "~> 7.1" # needed for app_test test case
-gem "sqlite3", "1.7.3"
+gem "sqlite3", "2.0.4"
 
 gem "minitest-reporters"
 
