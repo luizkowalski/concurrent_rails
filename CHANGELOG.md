@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1
+
+- Fixed missing `ConcurrentRails` module definition
+
 ## 0.6.0
 
 - Added tests for Rails 7.2
