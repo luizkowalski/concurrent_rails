@@ -14,3 +14,5 @@ gem "rubocop"
 gem "rubocop-minitest"
 gem "rubocop-performance"
 gem "rubocop-thread_safety"
+
+gem "ruby-lsp"
