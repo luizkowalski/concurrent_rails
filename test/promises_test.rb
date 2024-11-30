@@ -3,20 +3,20 @@
 require "test_helper"
 
 class PromisesTest < ActiveSupport::TestCase
-  test "should retrun value as expected" do
+  test "should return value as expected" do
     future = ConcurrentRails::Promises.future { 42 }
 
     assert_equal(42, future.value)
   end
 
-  test "should retrun `resolved?` with successful operation" do
+  test "should return `resolved?` with successful operation" do
     future = ConcurrentRails::Promises.future { 42 }
     future.value
 
     assert_predicate(future, :resolved?)
   end
 
-  test "should retrun `resolved?` with failed operation" do
+  test "should return `resolved?` with failed operation" do
     future = ConcurrentRails::Promises.future { 2 / 0 }
     future.value
 
