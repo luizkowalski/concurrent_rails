@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.0
+
+- Minimum Rails version bumped to 7.0
+- Marked as Rails 8 compatible
+
 ## 0.6.1
 
 - Fixed missing `ConcurrentRails` module definition
