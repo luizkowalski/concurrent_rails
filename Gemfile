@@ -9,6 +9,8 @@ gemspec
 gem "activerecord" # needed for app_test test case
 gem "sqlite3"
 
+gem "appraisal"
+
 gem "minitest-reporters"
 
 gem "rubocop"
