@@ -14,3 +14,9 @@ appraise "rails-8.0" do
   gem "rails", "~> 8.0.0"
   gem "sqlite3"
 end
+
+appraise "rails-main" do
+  gem "rails", github: "rails/rails", branch: "main"
+  gem "activerecord", github: "rails/rails", glob: "activerecord/*.gemspec"
+  gem "sqlite3"
+end
