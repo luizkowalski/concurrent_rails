@@ -146,6 +146,24 @@ gem install concurrent_rails
 
 Pull requests are always welcome
 
+
+## Updating Ruby or Rails versions using Appraisal
+
+This gem uses Appraisal for multiple Ruby and Rails versions testing. To update the Ruby or Rails versions, you can run:
+
+```bash
+bundle exec appraisal install
+```
+
+and to run the tests for all versions, you can run:
+
+```bash
+bundle exec appraisal rake test
+```
+
+Check the [usage](https://github.com/thoughtbot/appraisal?tab=readme-ov-file#usage) section of the Appraisal gem for more information on how to use it.
+
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
