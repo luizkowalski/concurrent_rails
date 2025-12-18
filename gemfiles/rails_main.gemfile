@@ -6,7 +6,7 @@ source "https://rubygems.org"
 
 gem "activerecord", glob: "activerecord/*.gemspec", git: "https://github.com/rails/rails.git"
 gem "appraisal"
-gem "minitest-reporters"
+gem "minitest", "< 6"
 gem "rails", branch: "main", git: "https://github.com/rails/rails.git"
 gem "rubocop"
 gem "rubocop-minitest"
