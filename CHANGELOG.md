@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1
+
+- Minimum Rails version bumped to 7.2
+
 ## 0.7.0
 
 - Minimum Rails version bumped to 7.0
