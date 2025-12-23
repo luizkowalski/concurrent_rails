@@ -11,7 +11,6 @@ gem "sqlite3"
 gem "appraisal"
 
 gem "minitest", "< 6"
-gem "minitest-mock"
 
 gem "rubocop"
 gem "rubocop-minitest"
