@@ -20,6 +20,7 @@ jobs:
           - "3.2"
           - "3.3"
           - "3.4"
+          - "4.0"
           # exclude:
           #   - gemfile: gemfiles/rails_8.0
           #     ruby: '3.4'
