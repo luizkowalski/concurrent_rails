@@ -127,7 +127,7 @@ For more information on how Futures works and how Rails handles multithread chec
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'concurrent_rails', '~> 0.5.1'
+gem 'concurrent_rails', '~> 0.7'
 ```
 
 And then execute:

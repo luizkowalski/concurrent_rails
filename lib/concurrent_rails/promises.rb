@@ -12,7 +12,7 @@ module ConcurrentRails
 
     %i[value value!].each do |method_name|
       define_method(method_name) do |timeout = nil, timeout_value = nil|
-        permit_concurrent_loads do
+        with_concurrent_load do
           instance.public_send(method_name, timeout, timeout_value)
         end
       end
@@ -36,7 +36,7 @@ module ConcurrentRails
     end
 
     def wait(timeout = nil)
-      result = permit_concurrent_loads { instance.__send__(:wait_until_resolved, timeout) }
+      result = with_concurrent_load { instance.__send__(:wait_until_resolved, timeout) }
 
       timeout ? result : self
     end
@@ -69,7 +69,7 @@ module ConcurrentRails
       Rails.application.executor.wrap(&)
     end
 
-    def permit_concurrent_loads(&block)
+    def with_concurrent_load(&block)
       rails_wrapped do
         ActiveSupport::Dependencies.interlock.permit_concurrent_loads(&block)
       end
