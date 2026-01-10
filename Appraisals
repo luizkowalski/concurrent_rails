@@ -3,11 +3,13 @@
 appraise "rails-7.2" do
   gem "rails", "~> 7.2.0"
   gem "sqlite3", "~> 1.7"
+  gem "minitest", "< 6"
 end
 
 appraise "rails-8.0" do
-  gem "rails", "~> 8.0"
+  gem "rails", "~> 8.0", "< 8.1"
   gem "sqlite3"
+  gem "minitest", "< 6"
 end
 
 appraise "rails-8.1" do
