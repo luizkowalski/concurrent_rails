@@ -10,7 +10,7 @@ gem "sqlite3"
 
 gem "appraisal"
 
-gem "minitest", "< 6"
+gem "minitest", "< 7"
 
 gem "rubocop"
 gem "rubocop-minitest"
