@@ -6,6 +6,7 @@ module ConcurrentRails
     include ConcurrentRails::CombinatorAdapter
     include ConcurrentRails::DelayAdapter
     include ConcurrentRails::FutureAdapter
+    include ConcurrentRails::ScheduleAdapter
 
     def initialize(executor)
       @executor = executor
