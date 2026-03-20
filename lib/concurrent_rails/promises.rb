@@ -21,9 +21,8 @@ module ConcurrentRails
     %i[then chain].each do |chainable|
       define_method(chainable) do |*args, &task|
         method = "#{chainable}_on"
-        @instance = rails_wrapped do
-          instance.public_send(method, executor, *args, &task)
-        end
+        wrapped_task = proc { |*a| rails_wrapped { task.call(*a) } }
+        @instance = instance.public_send(method, executor, *args, &wrapped_task)
 
         self
       end
@@ -43,17 +42,15 @@ module ConcurrentRails
 
     %i[on_fulfillment on_rejection on_resolution].each do |method|
       define_method(method) do |*args, &callback_task|
-        rails_wrapped do
-          @instance = instance.__send__(:"#{method}_using", executor, *args, &callback_task)
-        end
+        wrapped_callback = proc { |*a| rails_wrapped { callback_task.call(*a) } }
+        @instance = instance.__send__(:"#{method}_using", executor, *args, &wrapped_callback)
 
         self
       end
 
       define_method(:"#{method}!") do |*args, &callback_task|
-        rails_wrapped do
-          @instance = instance.__send__(:add_callback, "callback_#{method}", args, callback_task)
-        end
+        wrapped_callback = proc { |*a| rails_wrapped { callback_task.call(*a) } }
+        @instance = instance.__send__(:add_callback, "callback_#{method}", args, wrapped_callback)
 
         self
       end

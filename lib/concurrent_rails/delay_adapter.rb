@@ -15,7 +15,8 @@ module ConcurrentRails
     end
 
     def delay_on_rails(*args, &task)
-      @instance = rails_wrapped { delay_on(executor, *args, &task) }
+      wrapped_task = proc { |*a| rails_wrapped { task.call(*a) } }
+      @instance = delay_on(executor, *args, &wrapped_task)
 
       self
     end
