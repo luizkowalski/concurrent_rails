@@ -14,7 +14,10 @@ class CombinatorTest < ActiveSupport::TestCase
 
   test "any_resolved_future resolves with the first settled future" do
     a = ConcurrentRails::Promises.future { 1 }
-    b = ConcurrentRails::Promises.future { sleep 1; 2 }
+    b = ConcurrentRails::Promises.future do
+      sleep 1
+      2
+    end
 
     result = ConcurrentRails::Promises.any_resolved_future(a, b)
     result.wait

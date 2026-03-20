@@ -14,8 +14,8 @@ module ConcurrentRails
       end
     end
 
-    def future_on_rails(*args, &task)
-      wrapped_task = proc { |*a| rails_wrapped { task.call(*a) } }
+    def future_on_rails(*args)
+      wrapped_task = proc { |*a| rails_wrapped { yield(*a) } }
       @instance = future_on(executor, *args, &wrapped_task)
 
       self
