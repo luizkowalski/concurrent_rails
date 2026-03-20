@@ -3,6 +3,7 @@
 module ConcurrentRails
   class Promises
     include Concurrent::Promises::FactoryMethods
+    include ConcurrentRails::CombinatorAdapter
     include ConcurrentRails::DelayAdapter
     include ConcurrentRails::FutureAdapter
 
