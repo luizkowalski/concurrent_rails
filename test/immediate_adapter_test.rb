@@ -20,4 +20,10 @@ class ImmediateAdapterTest < ActiveSupport::TestCase
     assert_equal(42, result)
     assert_instance_of(Integer, result)
   end
+
+  test "real? returns true after a scoped mode block exits" do
+    ConcurrentRails::Testing.immediate { ConcurrentRails::Promises.future { 42 } }
+
+    assert_predicate(ConcurrentRails::Testing, :real?)
+  end
 end
