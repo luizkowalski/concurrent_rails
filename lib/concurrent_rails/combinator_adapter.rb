@@ -6,13 +6,11 @@ module ConcurrentRails
 
     class_methods do
       def zip(*promises)
-        futures = promises.map { |p| p.is_a?(ConcurrentRails::Promises) ? p.__send__(:instance) : p }
-        new(:io).tap { |p| p.instance_variable_set(:@instance, Concurrent::Promises.zip(*futures)) }
+        new(:io).tap { |p| p.instance_variable_set(:@instance, Concurrent::Promises.zip(*unwrap(promises))) }
       end
 
       def any_resolved_future(*promises)
-        futures = promises.map { |p| p.is_a?(ConcurrentRails::Promises) ? p.__send__(:instance) : p }
-        new(:io).tap { |p| p.instance_variable_set(:@instance, Concurrent::Promises.any_resolved_future(*futures)) }
+        new(:io).tap { |p| p.instance_variable_set(:@instance, Concurrent::Promises.any_resolved_future(*unwrap(promises))) }
       end
 
       def fulfilled_future(value, executor = :io)
@@ -21,6 +19,12 @@ module ConcurrentRails
 
       def rejected_future(reason, executor = :io)
         new(executor).tap { |p| p.instance_variable_set(:@instance, Concurrent::Promises.rejected_future(reason)) }
+      end
+
+      private
+
+      def unwrap(promises)
+        promises.map { |p| p.is_a?(ConcurrentRails::Promises) ? p.__send__(:instance) : p }
       end
     end
   end
