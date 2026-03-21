@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.0
+
+- Task blocks (futures, delays, `then`, `chain`, and all callbacks) are now wrapped in `Rails.application.executor.wrap` at execution time, not just at scheduling time. This ensures ActiveRecord connections are properly returned to the pool after each task runs on a thread pool thread.
+- Added `zip` and `any_resolved_future` combinators to `ConcurrentRails::Promises`
+- Added `fulfilled_future` and `rejected_future` factory methods to `ConcurrentRails::Promises`
+- Added `schedule` and `schedule_on` for timed future execution
+- Removed `permit_concurrent_loads` — it has been a no-op since Zeitwerk became the default autoloader
+- Fixed `ConcurrentRails::Testing` block forms (`immediate {}`, `fake {}`, `real {}`) incorrectly resetting `execution_mode` to the symbol `:real` instead of the string `"real"`, causing `real?` to always return `false` after a scoped block
+
 ## 0.7.1
 
 - Minimum Rails version bumped to 7.2

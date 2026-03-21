@@ -9,7 +9,7 @@ module ConcurrentRails
         define_method(test_mode) do |&task|
           @execution_mode = test_mode
           result          = task.call
-          @execution_mode = :real
+          @execution_mode = "real"
 
           result
         end

@@ -3,8 +3,10 @@
 module ConcurrentRails
   class Promises
     include Concurrent::Promises::FactoryMethods
+    include ConcurrentRails::CombinatorAdapter
     include ConcurrentRails::DelayAdapter
     include ConcurrentRails::FutureAdapter
+    include ConcurrentRails::ScheduleAdapter
 
     def initialize(executor)
       @executor = executor
@@ -12,18 +14,15 @@ module ConcurrentRails
 
     %i[value value!].each do |method_name|
       define_method(method_name) do |timeout = nil, timeout_value = nil|
-        with_concurrent_load do
-          instance.public_send(method_name, timeout, timeout_value)
-        end
+        rails_wrapped { instance.public_send(method_name, timeout, timeout_value) }
       end
     end
 
     %i[then chain].each do |chainable|
       define_method(chainable) do |*args, &task|
         method = "#{chainable}_on"
-        @instance = rails_wrapped do
-          instance.public_send(method, executor, *args, &task)
-        end
+        wrapped_task = proc { |*a| rails_wrapped { task.call(*a) } }
+        @instance = instance.public_send(method, executor, *args, &wrapped_task)
 
         self
       end
@@ -36,24 +35,22 @@ module ConcurrentRails
     end
 
     def wait(timeout = nil)
-      result = with_concurrent_load { instance.__send__(:wait_until_resolved, timeout) }
+      result = rails_wrapped { instance.__send__(:wait_until_resolved, timeout) }
 
       timeout ? result : self
     end
 
     %i[on_fulfillment on_rejection on_resolution].each do |method|
       define_method(method) do |*args, &callback_task|
-        rails_wrapped do
-          @instance = instance.__send__(:"#{method}_using", executor, *args, &callback_task)
-        end
+        wrapped_callback = proc { |*a| rails_wrapped { callback_task.call(*a) } }
+        @instance = instance.__send__(:"#{method}_using", executor, *args, &wrapped_callback)
 
         self
       end
 
       define_method(:"#{method}!") do |*args, &callback_task|
-        rails_wrapped do
-          @instance = instance.__send__(:add_callback, "callback_#{method}", args, callback_task)
-        end
+        wrapped_callback = proc { |*a| rails_wrapped { callback_task.call(*a) } }
+        @instance = instance.__send__(:add_callback, "callback_#{method}", args, wrapped_callback)
 
         self
       end
@@ -67,12 +64,6 @@ module ConcurrentRails
 
     def rails_wrapped(&)
       Rails.application.executor.wrap(&)
-    end
-
-    def with_concurrent_load(&block)
-      rails_wrapped do
-        ActiveSupport::Dependencies.interlock.permit_concurrent_loads(&block)
-      end
     end
 
     attr_reader :instance

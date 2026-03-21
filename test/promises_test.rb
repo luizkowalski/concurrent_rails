@@ -77,6 +77,12 @@ class PromisesTest < ActiveSupport::TestCase
     assert_equal(20, future.value!)
   end
 
+  test "should execute ActiveRecord queries inside the future" do
+    future = ConcurrentRails::Promises.future { User.count }
+
+    assert_kind_of(Integer, future.value)
+  end
+
   test "should return timeout value when future expires" do
     timeout_string = "timeout"
     value = ConcurrentRails::Promises.future { sleep 0.2 }.
