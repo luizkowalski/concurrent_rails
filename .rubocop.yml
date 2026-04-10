@@ -8,7 +8,7 @@ AllCops:
   UseCache: true
   SuggestExtensions: true
   CacheRootDirectory: "tmp/rubocop_cache"
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.3
 
 Layout/DotPosition:
   EnforcedStyle: trailing
