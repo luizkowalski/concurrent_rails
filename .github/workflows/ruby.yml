@@ -17,13 +17,9 @@ jobs:
           - gemfiles/rails_8.1
           - gemfiles/rails_main
         ruby:
-          - "3.2"
           - "3.3"
           - "3.4"
           - "4.0"
-        exclude:
-          - gemfile: gemfiles/rails_main
-            ruby: "3.2"
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}.gemfile
     steps:
@@ -34,6 +30,6 @@ jobs:
           bundler-cache: true
           cache-version: 4
       - name: Rubocop
-        run: bundle exec rubocop -D
+        run: bundle exec rubocop -D -f github
       - name: Run tests
         run: bin/test
