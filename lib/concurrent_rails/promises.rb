@@ -2,15 +2,43 @@
 
 module ConcurrentRails
   class Promises
-    include ConcurrentRails::CombinatorAdapter
-    include ConcurrentRails::DelayAdapter
-    include ConcurrentRails::FutureAdapter
-    include ConcurrentRails::ScheduleAdapter
+    class << self
+      %i[future delay schedule].each do |factory|
+        define_method(factory) do |*args, &task|
+          public_send(:"#{factory}_on", :io, *args, &task)
+        end
 
-    def self.wrap_task(task)
-      proc { |*args| Rails.application.executor.wrap { task.call(*args) } }
+        define_method(:"#{factory}_on") do |executor, *args, &task|
+          new(executor, Concurrent::Promises.public_send(:"#{factory}_on", executor, *args, &wrap_task(task)))
+        end
+      end
+
+      def zip(*promises)
+        new(:io, Concurrent::Promises.zip(*unwrap(promises)))
+      end
+
+      def any_resolved_future(*promises)
+        new(:io, Concurrent::Promises.any_resolved_future(*unwrap(promises)))
+      end
+
+      def fulfilled_future(value, executor = :io)
+        new(executor, Concurrent::Promises.fulfilled_future(value))
+      end
+
+      def rejected_future(reason, executor = :io)
+        new(executor, Concurrent::Promises.rejected_future(reason))
+      end
+
+      def wrap_task(task)
+        proc { |*args| Rails.application.executor.wrap { task.call(*args) } }
+      end
+
+      private
+
+      def unwrap(promises)
+        promises.map { |p| p.is_a?(Promises) ? p.__send__(:instance) : p }
+      end
     end
-    private_class_method :wrap_task
 
     def initialize(executor, instance)
       @executor = executor
@@ -25,10 +53,7 @@ module ConcurrentRails
 
     %i[then chain].each do |chainable|
       define_method(chainable) do |*args, &task|
-        wrapped_task = self.class.__send__(:wrap_task, task)
-        derived = instance.public_send(:"#{chainable}_on", executor, *args, &wrapped_task)
-
-        self.class.new(executor, derived)
+        self.class.new(executor, instance.public_send(:"#{chainable}_on", executor, *args, &self.class.wrap_task(task)))
       end
     end
 
@@ -46,15 +71,13 @@ module ConcurrentRails
 
     %i[on_fulfillment on_rejection on_resolution].each do |method|
       define_method(method) do |*args, &callback_task|
-        wrapped_callback = self.class.__send__(:wrap_task, callback_task)
-        instance.public_send(:"#{method}_using", executor, *args, &wrapped_callback)
+        instance.public_send(:"#{method}_using", executor, *args, &self.class.wrap_task(callback_task))
 
         self
       end
 
       define_method(:"#{method}!") do |*args, &callback_task|
-        wrapped_callback = self.class.__send__(:wrap_task, callback_task)
-        instance.public_send(:"#{method}!", *args, &wrapped_callback)
+        instance.public_send(:"#{method}!", *args, &self.class.wrap_task(callback_task))
 
         self
       end

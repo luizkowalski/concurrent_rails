@@ -53,6 +53,6 @@ module ConcurrentRails
       end
     end
 
-    ConcurrentRails::Promises.extend(TestingFuture)
+    ConcurrentRails::Promises.singleton_class.prepend(TestingFuture)
   end
 end
