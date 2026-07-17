@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0
+
+- **Breaking**: `then` and `chain` now return a new `ConcurrentRails::Promises` instance instead of mutating the receiver, matching `Concurrent::Promises` immutability. Chained call styles (`future { }.then { }.value`) keep working; branching multiple chains off the same future now works correctly instead of silently chaining off the previous `then`'s result
+- Replaced all usage of concurrent-ruby private APIs (`wait_until_resolved`, `add_callback`) with public equivalents (`wait`, `on_fulfillment!`/`on_rejection!`/`on_resolution!`), removing breakage risk on concurrent-ruby upgrades
+- `ConcurrentRails::Testing` modes now also apply to `delay` and `schedule` (previously only `future`)
+- `ConcurrentRails::Testing` block forms are now thread-isolated (via `ActiveSupport::IsolatedExecutionState`), restore the previous mode on exit even when the block raises, and no longer clobber a global mode set with `immediate!`/`fake!`
+- Declared `concurrent-ruby` as an explicit gem dependency
+- Removed empty `ConcurrentRails::Railtie`
+- README rewritten to drop the long-removed `ConcurrentRails::Future` and `ConcurrentRails::Multi`, document combinators/`schedule`, fix the swapped bang/non-bang callback description, and add caveats about `CurrentAttributes` and blocking waits
+
 ## 0.8.0
 
 - Task blocks (futures, delays, `then`, `chain`, and all callbacks) are now wrapped in `Rails.application.executor.wrap` at execution time, not just at scheduling time. This ensures ActiveRecord connections are properly returned to the pool after each task runs on a thread pool thread.

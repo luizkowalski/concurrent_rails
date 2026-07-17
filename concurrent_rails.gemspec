@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.metadata["rubygems_mfa_required"] = "true"
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
+  spec.add_dependency "concurrent-ruby", "~> 1.3"
   spec.add_dependency "railties", ">= 7.2"
   spec.add_dependency "zeitwerk"
 

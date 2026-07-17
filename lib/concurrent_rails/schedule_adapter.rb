@@ -10,15 +10,8 @@ module ConcurrentRails
       end
 
       def schedule_on(executor, delay, *args, &task)
-        new(executor).schedule_on_rails(delay, *args, &task)
+        new(executor, Concurrent::Promises.schedule_on(executor, delay, *args, &wrap_task(task)))
       end
-    end
-
-    def schedule_on_rails(delay, *args)
-      wrapped_task = proc { |*a| rails_wrapped { yield(*a) } }
-      @instance = schedule_on(executor, delay, *args, &wrapped_task)
-
-      self
     end
   end
 end
