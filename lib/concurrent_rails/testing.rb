@@ -2,20 +2,25 @@
 
 module ConcurrentRails
   class Testing
+    ISOLATION_KEY = :concurrent_rails_testing_mode
+
     class << self
-      attr_reader :execution_mode
+      def execution_mode
+        ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] || @default_mode || "real" # rubocop:disable ThreadSafety/ClassInstanceVariable
+      end
 
       %w[immediate fake real].each do |test_mode|
         define_method(test_mode) do |&task|
-          @execution_mode = test_mode
-          result          = task.call
-          @execution_mode = "real"
+          previous = ActiveSupport::IsolatedExecutionState[ISOLATION_KEY]
+          ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] = test_mode
 
-          result
+          task.call
+        ensure
+          ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] = previous
         end
 
         define_method(:"#{test_mode}!") do
-          @execution_mode = test_mode
+          @default_mode = test_mode
         end
 
         define_method(:"#{test_mode}?") do
@@ -25,17 +30,29 @@ module ConcurrentRails
     end
 
     module TestingFuture
-      def future(*args, &)
+      %i[future delay].each do |factory|
+        define_method(factory) do |*args, &task|
+          if ConcurrentRails::Testing.immediate?
+            public_send(:"#{factory}_on", :immediate, *args, &task)
+          elsif ConcurrentRails::Testing.fake?
+            task.call(*args)
+          else
+            super(*args, &task)
+          end
+        end
+      end
+
+      def schedule(delay, *args, &)
         if ConcurrentRails::Testing.immediate?
-          future_on(:immediate, *args, &)
+          schedule_on(:immediate, delay, *args, &)
         elsif ConcurrentRails::Testing.fake?
-          yield
+          yield(*args)
         else
           super
         end
       end
     end
 
-    ConcurrentRails::Promises.extend(TestingFuture)
+    ConcurrentRails::Promises.singleton_class.prepend(TestingFuture)
   end
 end

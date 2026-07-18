@@ -2,14 +2,47 @@
 
 module ConcurrentRails
   class Promises
-    include Concurrent::Promises::FactoryMethods
-    include ConcurrentRails::CombinatorAdapter
-    include ConcurrentRails::DelayAdapter
-    include ConcurrentRails::FutureAdapter
-    include ConcurrentRails::ScheduleAdapter
+    class << self
+      %i[future delay schedule].each do |factory|
+        define_method(factory) do |*args, &task|
+          public_send(:"#{factory}_on", :io, *args, &task)
+        end
 
-    def initialize(executor)
+        define_method(:"#{factory}_on") do |executor, *args, &task|
+          new(executor, Concurrent::Promises.public_send(:"#{factory}_on", executor, *args, &wrap_task(task)))
+        end
+      end
+
+      def zip(*promises)
+        new(:io, Concurrent::Promises.zip(*unwrap(promises)))
+      end
+
+      def any_resolved_future(*promises)
+        new(:io, Concurrent::Promises.any_resolved_future(*unwrap(promises)))
+      end
+
+      def fulfilled_future(value, executor = :io)
+        new(executor, Concurrent::Promises.fulfilled_future(value))
+      end
+
+      def rejected_future(reason, executor = :io)
+        new(executor, Concurrent::Promises.rejected_future(reason))
+      end
+
+      def wrap_task(task)
+        proc { |*args| Rails.application.executor.wrap { task.call(*args) } }
+      end
+
+      private
+
+      def unwrap(promises)
+        promises.map { |p| p.is_a?(Promises) ? p.__send__(:instance) : p }
+      end
+    end
+
+    def initialize(executor, instance)
       @executor = executor
+      @instance = instance
     end
 
     %i[value value!].each do |method_name|
@@ -20,37 +53,31 @@ module ConcurrentRails
 
     %i[then chain].each do |chainable|
       define_method(chainable) do |*args, &task|
-        method = "#{chainable}_on"
-        wrapped_task = proc { |*a| rails_wrapped { task.call(*a) } }
-        @instance = instance.public_send(method, executor, *args, &wrapped_task)
-
-        self
+        self.class.new(executor, instance.public_send(:"#{chainable}_on", executor, *args, &self.class.wrap_task(task)))
       end
     end
 
     def touch
-      @instance = rails_wrapped { instance.touch }
+      instance.touch
 
       self
     end
 
     def wait(timeout = nil)
-      result = rails_wrapped { instance.__send__(:wait_until_resolved, timeout) }
+      result = rails_wrapped { instance.wait(timeout) }
 
       timeout ? result : self
     end
 
     %i[on_fulfillment on_rejection on_resolution].each do |method|
       define_method(method) do |*args, &callback_task|
-        wrapped_callback = proc { |*a| rails_wrapped { callback_task.call(*a) } }
-        @instance = instance.__send__(:"#{method}_using", executor, *args, &wrapped_callback)
+        instance.public_send(:"#{method}_using", executor, *args, &self.class.wrap_task(callback_task))
 
         self
       end
 
       define_method(:"#{method}!") do |*args, &callback_task|
-        wrapped_callback = proc { |*a| rails_wrapped { callback_task.call(*a) } }
-        @instance = instance.__send__(:add_callback, "callback_#{method}", args, wrapped_callback)
+        instance.public_send(:"#{method}!", *args, &self.class.wrap_task(callback_task))
 
         self
       end

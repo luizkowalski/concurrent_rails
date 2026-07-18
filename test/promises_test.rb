@@ -29,6 +29,16 @@ class PromisesTest < ActiveSupport::TestCase
     assert_equal(84, future.value)
   end
 
+  test "`then` returns a new promise without mutating the receiver" do
+    root = ConcurrentRails::Promises.future { 42 }
+    doubled = root.then { |v| v * 2 }
+    tripled = root.then { |v| v * 3 }
+
+    refute_same(root, doubled)
+    assert_equal(84, doubled.value)
+    assert_equal(126, tripled.value)
+  end
+
   test "should chain futures with `chain`" do
     future = ConcurrentRails::Promises.future { 42 }.chain do |_fulfilled, value, _reason|
       value * 2

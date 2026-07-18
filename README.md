@@ -8,11 +8,11 @@ The goal of this gem is to provide a simple library that allows the developer to
 
 ## Usage
 
-This library provides three classes that will help you run tasks in parallel: `ConcurrentRails::Promises`,  `ConcurrentRails::Future` ([in the process of being deprecated by concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby#deprecated)) and `ConcurrentRails::Multi`
+This library provides `ConcurrentRails::Promises`, a Rails-aware wrapper around [`Concurrent::Promises`](https://ruby-concurrency.github.io/concurrent-ruby/master/Concurrent/Promises.html), plus `ConcurrentRails::Testing` helpers for your test suite.
 
 ### Promises
 
-`Promises` is the recommended way from `concurrent-ruby` to create `Future`s as `Concurrent::Future` will be deprecated at some point. All you have to do is call `#future` and pass a block to be executed asynchronously:
+All you have to do is call `#future` and pass a block to be executed asynchronously:
 
 ```ruby
 irb(main):001:0> future = ConcurrentRails::Promises.future(5) { |v| sleep(v); 42 }
@@ -33,9 +33,38 @@ The benefit of `Promises` over a pure `Future` class is that you can chain futur
 
 ```ruby
 irb(main):001:0> future = ConcurrentRails::Promises.future { 42 }.then { |v| v * 2 }
-=> #<ConcurrentRails::Promises:0x00007fe92eba3460 @future_instance=#...
+=> #<ConcurrentRails::Promises:0x00007fe92eba3460 @instance=#...
 irb(main):002:0> future.value
 => 84
+```
+
+`then` and `chain` return a **new** `ConcurrentRails::Promises` instance and leave the receiver untouched, matching `Concurrent::Promises` semantics. This means you can branch multiple chains off the same future:
+
+```ruby
+root    = ConcurrentRails::Promises.future { expensive_call }
+doubled = root.then { |v| v * 2 }
+tripled = root.then { |v| v * 3 } # branches off root, not doubled
+```
+
+### Combinators and factories
+
+`zip` and `any_resolved_future` combine multiple promises; `fulfilled_future` and `rejected_future` create already-resolved ones:
+
+```ruby
+a = ConcurrentRails::Promises.future { 1 }
+b = ConcurrentRails::Promises.future { 2 }
+
+ConcurrentRails::Promises.zip(a, b).value                 # => [1, 2]
+ConcurrentRails::Promises.any_resolved_future(a, b).value # => first to settle
+ConcurrentRails::Promises.fulfilled_future(42).value      # => 42
+```
+
+### Scheduled futures
+
+`schedule` runs a task after the given delay (in seconds):
+
+```ruby
+ConcurrentRails::Promises.schedule(10) { cleanup! }
 ```
 
 ### Delayed futures
@@ -50,7 +79,7 @@ irb(main):003:0> delay.state
 => :pending
 
 irb(main):004:0> delay.touch
-=> #<Concurrent::Promises::Future:0x00007f8b553325b0 pending>
+=> #<ConcurrentRails::Promises:0x00007f8b55333d48 ...
 
 irb(main):005:0> delay.state
 => :fulfilled
@@ -79,7 +108,12 @@ delay = ConcurrentRails::Promises.delay { complex_find_user_query }.
 delay.touch
 ```
 
-All of these callbacks have a bang version (e.g. `on_fulfillment!`). The bang version will execute the callback on the same thread pool that was initially set up and the version without bang will run asynchronously on a different executor.
+All of these callbacks have a bang version (e.g. `on_fulfillment!`). The bang version runs the callback synchronously on the thread that resolved the future, while the version without bang runs it asynchronously on the promise's executor.
+
+## Caveats
+
+* `Current` attributes (`ActiveSupport::CurrentAttributes`) are **not** propagated to the future's thread. Each task runs inside `Rails.application.executor.wrap`, which resets per-execution state, so `Current.user` and friends will be `nil` inside the block. Pass what you need as arguments instead.
+* `#value` and `#wait` block the calling thread. In development, a thread blocked inside a future wait counts as a running execution, so code reloading has to wait for it. Prefer `#touch` plus callbacks when you don't need the result immediately.
 
 ## Testing
 
@@ -112,7 +146,9 @@ irb(main):004:0> result.class
 => Integer
 ```
 
-You can also set the strategy globally using `ConcurrentRails::Testing.fake!` or `ConcurrentRails::Testing.immediate!`
+Both strategies also apply to `delay` and `schedule` (`fake` runs a scheduled task right away, ignoring the delay).
+
+The block form only changes the mode for the current thread and restores the previous mode when the block exits, even if it raises. You can also set the strategy globally using `ConcurrentRails::Testing.fake!` or `ConcurrentRails::Testing.immediate!`, and reset it with `ConcurrentRails::Testing.real!`
 
 ## Further reading
 
@@ -127,7 +163,7 @@ For more information on how Futures works and how Rails handles multithread chec
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'concurrent_rails', '~> 0.7'
+gem 'concurrent_rails', '~> 0.9'
 ```
 
 And then execute:
