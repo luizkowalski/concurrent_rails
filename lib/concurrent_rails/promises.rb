@@ -3,14 +3,28 @@
 module ConcurrentRails
   class Promises
     class << self
-      %i[future delay schedule].each do |factory|
-        define_method(factory) do |*args, &task|
-          public_send(:"#{factory}_on", :io, *args, &task)
-        end
+      def future(*args, &)
+        future_on(:io, *args, &)
+      end
 
-        define_method(:"#{factory}_on") do |executor, *args, &task|
-          new(executor, Concurrent::Promises.public_send(:"#{factory}_on", executor, *args, &wrap_task(task)))
-        end
+      def future_on(executor, *args, &task)
+        new(executor, Concurrent::Promises.future_on(executor, *args, &wrap_task(task)))
+      end
+
+      def delay(*args, &)
+        delay_on(:io, *args, &)
+      end
+
+      def delay_on(executor, *args, &task)
+        new(executor, Concurrent::Promises.delay_on(executor, *args, &wrap_task(task)))
+      end
+
+      def schedule(*args, &)
+        schedule_on(:io, *args, &)
+      end
+
+      def schedule_on(executor, *args, &task)
+        new(executor, Concurrent::Promises.schedule_on(executor, *args, &wrap_task(task)))
       end
 
       def zip(*promises)
@@ -45,16 +59,20 @@ module ConcurrentRails
       @instance = instance
     end
 
-    %i[value value!].each do |method_name|
-      define_method(method_name) do |timeout = nil, timeout_value = nil|
-        rails_wrapped { instance.public_send(method_name, timeout, timeout_value) }
-      end
+    def value(timeout = nil, timeout_value = nil)
+      rails_wrapped { instance.value(timeout, timeout_value) }
     end
 
-    %i[then chain].each do |chainable|
-      define_method(chainable) do |*args, &task|
-        self.class.new(executor, instance.public_send(:"#{chainable}_on", executor, *args, &self.class.wrap_task(task)))
-      end
+    def value!(timeout = nil, timeout_value = nil)
+      rails_wrapped { instance.value!(timeout, timeout_value) }
+    end
+
+    def then(*args, &task)
+      self.class.new(executor, instance.then_on(executor, *args, &self.class.wrap_task(task)))
+    end
+
+    def chain(*args, &task)
+      self.class.new(executor, instance.chain_on(executor, *args, &self.class.wrap_task(task)))
     end
 
     def touch
@@ -69,21 +87,47 @@ module ConcurrentRails
       timeout ? result : self
     end
 
-    %i[on_fulfillment on_rejection on_resolution].each do |method|
-      define_method(method) do |*args, &callback_task|
-        instance.public_send(:"#{method}_using", executor, *args, &self.class.wrap_task(callback_task))
+    def on_fulfillment(*args, &callback_task)
+      instance.on_fulfillment_using(executor, *args, &self.class.wrap_task(callback_task))
 
-        self
-      end
-
-      define_method(:"#{method}!") do |*args, &callback_task|
-        instance.public_send(:"#{method}!", *args, &self.class.wrap_task(callback_task))
-
-        self
-      end
+      self
     end
 
-    delegate :state, :reason, :rejected?, :resolved?, :fulfilled?, to: :instance
+    def on_fulfillment!(*args, &callback_task)
+      instance.on_fulfillment!(*args, &self.class.wrap_task(callback_task))
+
+      self
+    end
+
+    def on_rejection(*args, &callback_task)
+      instance.on_rejection_using(executor, *args, &self.class.wrap_task(callback_task))
+
+      self
+    end
+
+    def on_rejection!(*args, &callback_task)
+      instance.on_rejection!(*args, &self.class.wrap_task(callback_task))
+
+      self
+    end
+
+    def on_resolution(*args, &callback_task)
+      instance.on_resolution_using(executor, *args, &self.class.wrap_task(callback_task))
+
+      self
+    end
+
+    def on_resolution!(*args, &callback_task)
+      instance.on_resolution!(*args, &self.class.wrap_task(callback_task))
+
+      self
+    end
+
+    def state = instance.state
+    def reason = instance.reason
+    def rejected? = instance.rejected?
+    def resolved? = instance.resolved?
+    def fulfilled? = instance.fulfilled?
 
     attr_reader :executor
 

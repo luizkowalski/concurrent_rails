@@ -3,42 +3,79 @@
 module ConcurrentRails
   class Testing
     ISOLATION_KEY = :concurrent_rails_testing_mode
+    DEFAULT_MODE_KEY = :concurrent_rails_testing_default_mode
 
     class << self
       def execution_mode
-        ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] || @default_mode || "real" # rubocop:disable ThreadSafety/ClassInstanceVariable
+        ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] || Ractor.current[DEFAULT_MODE_KEY] || "real"
       end
 
-      %w[immediate fake real].each do |test_mode|
-        define_method(test_mode) do |&task|
-          previous = ActiveSupport::IsolatedExecutionState[ISOLATION_KEY]
-          ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] = test_mode
+      def immediate(&)
+        with_mode("immediate", &)
+      end
 
-          task.call
-        ensure
-          ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] = previous
-        end
+      def immediate!
+        Ractor.current[DEFAULT_MODE_KEY] = "immediate"
+      end
 
-        define_method(:"#{test_mode}!") do
-          @default_mode = test_mode
-        end
+      def immediate?
+        execution_mode == "immediate"
+      end
 
-        define_method(:"#{test_mode}?") do
-          execution_mode == test_mode
-        end
+      def fake(&)
+        with_mode("fake", &)
+      end
+
+      def fake!
+        Ractor.current[DEFAULT_MODE_KEY] = "fake"
+      end
+
+      def fake?
+        execution_mode == "fake"
+      end
+
+      def real(&)
+        with_mode("real", &)
+      end
+
+      def real!
+        Ractor.current[DEFAULT_MODE_KEY] = "real"
+      end
+
+      def real?
+        execution_mode == "real"
+      end
+
+      private
+
+      def with_mode(mode)
+        previous = ActiveSupport::IsolatedExecutionState[ISOLATION_KEY]
+        ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] = mode
+
+        yield
+      ensure
+        ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] = previous
       end
     end
 
     module TestingFuture
-      %i[future delay].each do |factory|
-        define_method(factory) do |*args, &task|
-          if ConcurrentRails::Testing.immediate?
-            public_send(:"#{factory}_on", :immediate, *args, &task)
-          elsif ConcurrentRails::Testing.fake?
-            task.call(*args)
-          else
-            super(*args, &task)
-          end
+      def future(*args, &)
+        if ConcurrentRails::Testing.immediate?
+          future_on(:immediate, *args, &)
+        elsif ConcurrentRails::Testing.fake?
+          yield(*args)
+        else
+          super
+        end
+      end
+
+      def delay(*args, &)
+        if ConcurrentRails::Testing.immediate?
+          delay_on(:immediate, *args, &)
+        elsif ConcurrentRails::Testing.fake?
+          yield(*args)
+        else
+          super
         end
       end
 

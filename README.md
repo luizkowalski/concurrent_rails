@@ -148,7 +148,7 @@ irb(main):004:0> result.class
 
 Both strategies also apply to `delay` and `schedule` (`fake` runs a scheduled task right away, ignoring the delay).
 
-The block form only changes the mode for the current thread and restores the previous mode when the block exits, even if it raises. You can also set the strategy globally using `ConcurrentRails::Testing.fake!` or `ConcurrentRails::Testing.immediate!`, and reset it with `ConcurrentRails::Testing.real!`
+The block form only changes the mode for the current thread and restores the previous mode when the block exits, even if it raises. You can also set the strategy for the current Ractor using `ConcurrentRails::Testing.fake!` or `ConcurrentRails::Testing.immediate!`, and reset it with `ConcurrentRails::Testing.real!`. Bang modes remain shared by every thread within that Ractor.
 
 ## Further reading
 

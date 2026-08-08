@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Made the gem's own code and load path Ractor-safe by eager-loading its constants without Zeitwerk and replacing Proc-backed generated methods
+- `ConcurrentRails::Testing` bang modes are now scoped to the current Ractor while remaining shared by threads within that Ractor
+
 ## 0.9.0
 
 - **Breaking**: `then` and `chain` now return a new `ConcurrentRails::Promises` instance instead of mutating the receiver, matching `Concurrent::Promises` immutability. Chained call styles (`future { }.then { }.value`) keep working; branching multiple chains off the same future now works correctly instead of silently chaining off the previous `then`'s result
