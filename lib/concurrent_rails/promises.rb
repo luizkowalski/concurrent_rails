@@ -129,12 +129,14 @@ module ConcurrentRails
     def resolved?  = instance.resolved?
     def fulfilled? = instance.fulfilled?
 
-    attr_reader :executor, :instance
+    attr_reader :executor
 
     private
 
     def rails_wrapped(&)
       Rails.application.executor.wrap(&)
     end
+
+    attr_reader :instance
   end
 end

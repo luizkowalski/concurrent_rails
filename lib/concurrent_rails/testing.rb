@@ -3,11 +3,10 @@
 module ConcurrentRails
   class Testing
     ISOLATION_KEY = :concurrent_rails_testing_mode
-    DEFAULT_MODE_KEY = :concurrent_rails_testing_default_mode
 
     class << self
       def execution_mode
-        ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] || Ractor.current[DEFAULT_MODE_KEY] || "real"
+        ActiveSupport::IsolatedExecutionState[ISOLATION_KEY] || Ractor.current[ISOLATION_KEY] || "real"
       end
 
       def immediate(&)
@@ -15,7 +14,7 @@ module ConcurrentRails
       end
 
       def immediate!
-        Ractor.current[DEFAULT_MODE_KEY] = "immediate"
+        Ractor.current[ISOLATION_KEY] = "immediate"
       end
 
       def immediate?
@@ -27,7 +26,7 @@ module ConcurrentRails
       end
 
       def fake!
-        Ractor.current[DEFAULT_MODE_KEY] = "fake"
+        Ractor.current[ISOLATION_KEY] = "fake"
       end
 
       def fake?
@@ -39,7 +38,7 @@ module ConcurrentRails
       end
 
       def real!
-        Ractor.current[DEFAULT_MODE_KEY] = "real"
+        Ractor.current[ISOLATION_KEY] = "real"
       end
 
       def real?
