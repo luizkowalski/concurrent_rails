@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require "zeitwerk"
-
-loader = Zeitwerk::Loader.for_gem
-loader.setup
-
 module ConcurrentRails; end
+
+require_relative "concurrent_rails/version"
+require_relative "concurrent_rails/promises"
+require_relative "concurrent_rails/testing"

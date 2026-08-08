@@ -19,8 +19,6 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   spec.add_dependency "concurrent-ruby", "~> 1.3"
-  spec.add_dependency "railties", ">= 7.2"
-  spec.add_dependency "zeitwerk"
-
+  spec.add_dependency "railties", ">= 8.0"
   spec.required_ruby_version = ">= 3.3"
 end
