@@ -123,20 +123,18 @@ module ConcurrentRails
       self
     end
 
-    def state = instance.state
-    def reason = instance.reason
-    def rejected? = instance.rejected?
-    def resolved? = instance.resolved?
+    def state      = instance.state
+    def reason     = instance.reason
+    def rejected?  = instance.rejected?
+    def resolved?  = instance.resolved?
     def fulfilled? = instance.fulfilled?
 
-    attr_reader :executor
+    attr_reader :executor, :instance
 
     private
 
     def rails_wrapped(&)
       Rails.application.executor.wrap(&)
     end
-
-    attr_reader :instance
   end
 end
